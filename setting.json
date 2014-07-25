@@ -1,0 +1,11 @@
+{
+    "principal":"icebox",
+    "path":"/user/icebox/out",
+    "html":"{path}/h",
+    "md":"{path}/m",
+    "tpl":"{path}/html.tpl",
+    "editor":"/usr/bin/vim",
+    "sytle":["../static/foghorn.css"],
+    "extend":["/user/icebox/addrss.py", "/user/icebox/git.sh"],
+    "shell":"{extend} {path} {name}",
+}

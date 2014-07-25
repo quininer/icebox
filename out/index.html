@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+        <title>icebox</title>
+        <link rel='stylesheet' href='./static/foghorn.css' type='text/css'>
+        <script src='./static/xgum.js'></script>
+        <script>
+            json = gum.ajax('./item.json').responseText;
+            item = JSON.parse(json);
+        </script>
+    </head>
+    <body>
+        <style scoped>
+            ul {
+                font-size: 1.2em;
+            }
+            h1 {
+                font-size: 3.6em;
+            }
+        </style>
+        <h1><strong>icebox</strong></h1>
+        <ul id='list'></ul>
+        <script>
+            list = gum.id('list');
+            num = 0;
+            nums = [];
+            try{
+                for (var id in item){nums.push(id)};
+                num = Math.max.apply(null, nums);
+            }catch(e){
+                list.innerHTML = "<li>貌似item.json加载错误了？</li>";
+                num = NaN;
+            };
+            (num == 0)&&(list.innerHTML = "<li>作者太懒，一篇文章都没有...</li>");
+            while(num){
+                if (item[num]){
+                    list.innerHTML += "<li><a href='"+item[num][1]+"'>"+item[num][0]+"</a></li>";
+                };
+                num -= 1;
+            };
+        </script>
+    </body>
+</html>
