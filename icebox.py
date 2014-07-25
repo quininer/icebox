@@ -45,7 +45,7 @@ def markout(name, md_path, path, hide):
 
 def editor(name, md_path, path, hide):
     command = (setting['editor'], md_path+'/'+name+'.md')
-    try: popen(command).wait()#   使用Gvim的话，会不等待，往下执行。
+    try: popen(command).wait()#FIXME    使用Gvim的话，会不等待，往下执行。
     except Exception: system(' '.join(command))
     markout(name, md_path, path, hide)
 
