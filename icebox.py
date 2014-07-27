@@ -24,7 +24,7 @@ def osexec(name, path, ends):
 
 def additem(name, link, path, hide):
     item = loads(open(path+'/item.json').read())
-    if (not name in [item[i][0] for i in item] and hide):
+    if not (name in [item[i][0] for i in item] and hide):
         item[str(int(max(item))+1)] = [name, '.' + link]
         open(path+'/item.json', 'w').write(dumps(item))
 
