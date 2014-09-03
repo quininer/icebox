@@ -5,7 +5,7 @@
     "md":"{path}/m",
     "tpl":"{path}/html.tpl",
     "editor":"/usr/bin/vim",
-    "sytle":["../static/foghorn.css"],
+    "style":["../static/foghorn.css"],
     "extend":["/user/icebox/addrss.py", "/user/icebox/git.sh"],
     "shell":"{extend} {path} {name}"
 }
