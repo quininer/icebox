@@ -10,7 +10,7 @@ if [ $1 = 'install' ]; then
     chmod +x /usr/bin/icebox
 
     vi ./setting.json
-    exit 1
+    exit 0
 elif [ $1 = 'git' ]; then
     cd $2
     git init
@@ -19,13 +19,13 @@ elif [ $1 = 'git' ]; then
     git commit -m "New box for $3"
     git push box +master
     cp ./git.sh $3/../
-    exit 1
+    exit 0
 elif [ $1 = 'key' ]; then
     cd $HOME/.ssh/
     ssh-keygen -t rsa -C "$3"
     cat $HOME/.ssh/id_ras.pub
     chrome "https://github.com/$2/ssh-key"
-    exit 1
+    exit 0
 elif [ $1 = 'help' ]; then
     echo "安装 icebox"
     echo "    sh install.sh install"
@@ -33,5 +33,5 @@ elif [ $1 = 'help' ]; then
     echo "    sh install.sh git <path> <mail>"
     echo "生成 ssh key"
     echo "    sh install.sh key <name> <mail>"
-    exit 1
+    exit 0
 fi
