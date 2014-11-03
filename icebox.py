@@ -19,8 +19,8 @@ def osexec(name, path, ends):
             extend=ext.decode('utf8')).encode('utf8'))
     exit('[!] {end}完成!'.format(end=ends))
 
-def additem(name, link, path, hide):
-    item = loads(open(path+'/item.json').read())
+def additem(name, path, hide):
+    item = loads(open('{path}/blog.json').read())
     if not (name in item or hide):
         item.append(name)
         open('{path}/blog.json'.format(path=path), 'w').write(dumps(item))

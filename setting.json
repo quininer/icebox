@@ -1,4 +1,5 @@
 {
+    "site":"http://localhost/",
     "path":"/user/icebox/out",
     "mark":"{path}/mark",
     "editor":"/usr/bin/vim",
