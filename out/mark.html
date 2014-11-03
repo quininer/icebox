@@ -12,7 +12,6 @@
             $.getJSON('./config.json')
             .done(function(config){
                 config.name = document.location.hash.substring(1)||config.name;
-                var mdurl = './'+config.mark.substring(7)+'/'+config.name+'.md';
                 $('#head').append($('<title>').text(config.name));
                 $.each(config.style, function(_, link){
                     $('#head').append($('<link>').attr({
@@ -21,10 +20,9 @@
                         "href":link
                     }));
                 });
-                $.get(mdurl)
+                $.get('./'+config.mark.substring(7)+'/'+config.name+'.md')
                 .success(function(text){
                     $('#mark').append(marked(text));
-                    window.history.replaceState({}, '', mdurl);
                     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
                     var disqus_shortname = 'quininer'; // required: replace example with your forum shortname
 

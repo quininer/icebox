@@ -43,10 +43,10 @@
                     );
                     return;
                 };
-                $.each(items.reverse(), function(_, item){
+                $.each(items.reverse(), function(i, item){
                     $('#list').append(
                         $('<li>').html(
-                            $('<a>').text(item).attr('href', './mark.html#'+item)
+                            $('<a>').text(item).attr('href', './mark.html?'+(items.length - i)+'#'+item)
                         )
                     );
                 })
