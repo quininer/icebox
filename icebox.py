@@ -20,7 +20,7 @@ def osexec(name, path, ends):
     exit('[!] {end}完成!'.format(end=ends))
 
 def additem(name, path, hide):
-    item = loads(open('{path}/blog.json').read())
+    item = loads(open('{path}/blog.json'.format(path=path)).read())
     if not (name in item or hide):
         item.append(name)
         open('{path}/blog.json'.format(path=path), 'w').write(dumps(item))
@@ -36,7 +36,7 @@ def markout(name, markpath, path, hide):
         ), 'w'
     ).write(mark.encode('utf8'))
 
-    additem(name, markpath, hide)
+    additem(name, path, hide)
 
 def editor(name, markpath, path, hide):
     command = (setting['editor'], '{mark}/{name}.md'.format(mark=markpath, name=name))

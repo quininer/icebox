@@ -1,1 +1,1 @@
-feedgen
+PyRSS2Gen
