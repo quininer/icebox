@@ -1,0 +1,5 @@
+{
+    "name":"icebox",
+    "mark":"{path}/mark",
+    "style":["../static/foghorn.css"]
+}
