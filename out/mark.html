@@ -12,7 +12,7 @@
             $.getJSON('./config.json')
             .done(function(config){
                 config.name = document.location.search.substring(1)||config.name;
-                $('#head').append($('<title>').text(config.name));
+                $('#head').append($('<title>').text(decodeURL(config.name)));
                 $.each(config.style, function(_, link){
                     $('#head').append($('<link>').attr({
                         "rel":"stylesheet",
