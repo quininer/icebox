@@ -1,5 +1,6 @@
 {
     "name":"icebox",
-    "mark":"{path}/mark",
+    "mark":"mark",
+    "disqus":"",
     "style":["../static/foghorn.css"]
 }
