@@ -16,7 +16,8 @@ setting = loads(open((spath[0] or '.')+'/setting.json').read())
 def osexec(name, path, ends):
     for ext in setting['extend']:
         system(setting['shell'].format(name=name, path=path,
-            extend=ext.decode('utf8')).encode('utf8'))
+            extend=ext.decode('utf8')).encode('utf8')
+        )
     exit('[!] {end}完成!'.format(end=ends))
 
 def additem(name, path, hide):
