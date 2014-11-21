@@ -4,6 +4,7 @@
 from __future__ import unicode_literals, print_function
 from sys import version_info, path as spath
 version = version_info < (3,0,0) and True or False
+# XXX 下句没什么意义，去掉syntastic的错误提示而已
 if not version: unicode = None
 
 from os import listdir, system, remove, rename
