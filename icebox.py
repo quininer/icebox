@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # encoding: utf-8
 
 from __future__ import unicode_literals
@@ -13,20 +13,21 @@ from time import ctime
 
 setting = loads(open((spath[0] or '.')+'/setting.json').read())
 
-def osexec(name, path, ends):
+def osexec(name, ends):
     for ext in setting['extend']:
-        system(setting['shell'].format(name=name, path=path,
-            extend=ext.decode('utf8')).encode('utf8')
+        system(setting['shell'].format(name=name, path=setting['path'],
+            ext=ext.decode('utf8')).encode('utf8'), mark=setting['mark'].fotmat(path=setting['path'])
         )
     exit('[!] {end}完成!'.format(end=ends))
 
 def additem(name, path, hide):
     item = loads(open('{path}/blog.json'.format(path=path)).read())
-    if not (name in item or hide):
+    if not hide:
+        if name in item: item.pop(item.index(name))
         item.append(name)
         open('{path}/blog.json'.format(path=path), 'w').write(dumps(item))
 
-    osexec(name, path, '')
+    osexec(name, '')
 
 def markout(name, markpath, path, hide):
     mark = open('{mark}/{name}.md'.format(mark=markpath, name=name)).read().decode('utf8')

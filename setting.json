@@ -3,6 +3,6 @@
     "path":"/user/icebox/out",
     "mark":"{path}/mark",
     "editor":"/usr/bin/vim",
-    "extend":["/user/icebox/addrss.py", "/user/icebox/git.sh"],
-    "shell":"{extend} {path} {name}"
+    "extend":["ls"],
+    "shell":"{ext} {mark}/{name}.md"
 }
