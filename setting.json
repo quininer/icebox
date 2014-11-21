@@ -1,7 +1,7 @@
 {
     "site":"http://localhost/",
-    "path":"/user/icebox/out",
-    "mark":"{path}/mark",
+    "path":"/home/user/icebox/out",
+    "md":"{path}/mark",
     "editor":"/usr/bin/vim",
     "extend":["ls"],
     "shell":"{ext} {mark}/{name}.md"
