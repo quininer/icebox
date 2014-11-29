@@ -11,10 +11,10 @@ from os import listdir, system, remove, rename
 from subprocess import Popen as popen
 from optparse import OptionParser
 from json import loads, dumps
+from hashlib import md5
 from time import ctime
 
 setting = loads(open((spath[0] or '.')+'/setting.json').read())
-
 def strcode(string):
     if version: return isinstance(string, unicode) and string.encode('utf8') or string.decode('utf8')
     else: return string
@@ -27,8 +27,8 @@ def osexec(name, path, mark, ends):
     exit('[!] {end}完成!'.format(end=ends))
 
 def additem(name, path, mark, hide):
-    item = loads(open('{path}/blog.json'.format(path=path)).read())
     if not hide:
+        item = loads(open('{path}/blog.json'.format(path=path)).read())
         if name in item: item.pop(item.index(name))
         item.append(name)
         open('{path}/blog.json'.format(path=path), 'w').write(dumps(item))
@@ -36,9 +36,14 @@ def additem(name, path, mark, hide):
     osexec(name, path, mark, '')
 
 def editor(name, mark, path, hide):
-    command = (setting['editor'], '{mark}/{name}.md'.format(mark=mark, name=name))
+    checkhash, markpath = md5(), '{mark}/{name}.md'.format(mark=mark, name=name)
+    MD5 = checkhash.update(open(markpath, 'rb').read()).hexdigest()
+
+    command = (setting['editor'], markpath)
     try: popen(command).wait()#FIXME    使用Gvim的话，会不等待，往下执行。
     except Exception: system(' '.join(command))
+
+    if MD5 == checkhash.update(open(markpath, 'rb').read()).hexdigest(): hide = True
     additem(name, path, mark, hide)
 
 def rmvx(name, mark, path, new, hide):
