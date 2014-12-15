@@ -2,22 +2,10 @@
 <html>
     <head id='head'>
         <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-        <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
         <script>
-            $.getJSON('./config.json')
-            .done(function(config){
-                document.config = config;
-                $('#head').append($('<title>').text(config['name']));
-                $('#name').text(config['name']);
-                $.each(config['style'], function(_, link){
-                    $('#head').append($('<link>').attr({
-                        "rel":"stylesheet",
-                        "type":"text/css",
-                        "href":link
-                    }));
-                })
-            })
+            if(document.location.protocol == 'http:')document.location.protocol = 'https:';
         </script>
+        <script src='./static/jquery.min.js'></script>
     </head>
     <body>
         <style scoped>
@@ -34,27 +22,44 @@
         </style>
         <h1><strong id='name'>icebox</strong></h1>
         <ul id='list'></ul>
+        <div class='it'>
+            <p><a href='/mark.html?@links'>Links</a></p>
+            <p><a href='https://creativecommons.org/licenses/by-nc-sa/3.0/'>Share it? Attribution-NonCommercial-ShareAlike</a></p>
+        </div>
         <script>
-            $.getJSON('./blog.json')
-            .done(function(items){
-                if(!items){
-                    $('#list').append(
-                        $('<li>').text('作者太懒，一篇文章都没有...')
-                    );
-                    return;
-                };
-                $.each(items.reverse(), function(_, item){
-                    $('#list').append(
-                        $('<li>').html(
-                            $('<a>').text(item).attr('href', './mark.html?'+item)
-                        )
-                    );
+            $.getJSON('./config.json')
+            .done(function(config){
+                document.config = config;
+                $('#head').append($('<title>').text(config['name']));
+                $('#name').text(config['name']);
+                $.each(config['style'], function(_, link){
+                    $('#head').append($('<link>').attr({
+                        "rel":"stylesheet",
+                        "type":"text/css",
+                        "href":link
+                    }));
                 })
-            })
-            .fail(function(){
-                $('#list').append(
-                    $('<li>').text('貌似blog.json加载错误了？')
-                )
+                $.getJSON('./blog.json')
+                .done(function(items){
+                    if(!items){
+                        $('#list').append(
+                            $('<li>').text('作者太懒，一篇文章都没有...')
+                        );
+                        return;
+                    };
+                    $.each(items.reverse(), function(_, item){
+                        $('#list').append(
+                            $('<li>').html(
+                                $('<a>').text(item).attr('href', './mark.html?'+item)
+                            )
+                        );
+                    })
+                })
+                .fail(function(){
+                    $('#list').append(
+                        $('<li>').text('貌似blog.json加载错误了？')
+                    )
+                });
             });
         </script>
     </body>
