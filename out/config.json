@@ -2,5 +2,8 @@
     "name":"icebox",
     "mark":"mark",
     "disqus":"",
-    "style":["/static/foghorn.css"]
+    "style":["/static/foghorn.css"],
+    "links":[
+        [{"name":"Share it? Attribution-NonCommercial-ShareAlike","href":"https://creativecommons.org/licenses/by-nc-sa/3.0/"}]
+    ]
 }
