@@ -2,9 +2,7 @@
 <html>
     <head id='head'>
         <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-        <script>
-            if(document.location.protocol == 'http:')document.location.protocol = 'https:';
-        </script>
+        <script>if(document.location.protocol == 'http:')document.location.protocol = 'https';</script>
         <script src='./static/jquery.min.js'></script>
         <script src='./static/marked.min.js'></script>
     </head>
@@ -35,13 +33,9 @@
                         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
                     }})();
                 })
-                .fail(function(){
-                    $('#mark').append(marked("# ( ・_・)"))
-                });
+                .fail(function(){$('#mark').append(marked("# ( ・_・)"))});
             })
-            .fail(function(){
-                $('#mark').append(marked("# ( ・_・)"))
-            });
+            .fail(function(){$('#mark').append(marked("# ( ・_・)"))});
         </script>
     </body>
 </html>

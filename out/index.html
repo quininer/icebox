@@ -2,9 +2,7 @@
 <html>
     <head id='head'>
         <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-        <script>
-            if(document.location.protocol == 'http:')document.location.protocol = 'https:';
-        </script>
+        <script>if(document.location.protocol == 'http:')document.location.protocol = 'https';</script>
         <script src='./static/jquery.min.js'></script>
     </head>
     <body>
@@ -59,15 +57,11 @@
                     })
                 })
                 .fail(function(){
-                    $('#list').append(
-                        $('<li>').text('貌似blog.json加载错误了？')
-                    )
+                    $('#list').append($('<li>').text('貌似blog.json加载错误了？'))
                 });
             })
             .fail(function(){
-                $('#list').append(
-                    $('<li>').text('貌似config.json加载错误了？')
-                )
+                $('#list').append($('<li>').text('貌似config.json加载错误了？'))
             });
         </script>
     </body>
