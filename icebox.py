@@ -24,7 +24,7 @@ def osexec(name, path, mark, ends):
         system(strcode(setting['shell'].format(
             name=name, path=path, ext=strcode(ext), mark=mark
         )))
-    exit('[!] {end}完成!'.format(end=ends))
+    else: exit('[!] {end}完成!'.format(end=ends))
 
 def additem(name, path, mark, hide):
     if not hide:
