@@ -37,13 +37,15 @@ def additem(name, path, mark, hide):
 
 def editor(name, mark, path, hide):
     checkhash, markpath = md5(), '{mark}/{name}.md'.format(mark=mark, name=name)
-    MD5 = checkhash.update(open(markpath, 'rb').read()).hexdigest()
+    checkhash.update(open(markpath, 'rb').read())
+    MD5 = checkhash.hexdigest()
 
     command = (setting['editor'], markpath)
     try: popen(command).wait()#FIXME    使用Gvim的话，会不等待，往下执行。
     except Exception: system(' '.join(command))
 
-    if MD5 == checkhash.update(open(markpath, 'rb').read()).hexdigest(): hide = True
+    checkhash.update(open(markpath, 'rb').read())
+    if MD5 == checkhash.hexdigest(): hide = True
     additem(name, path, mark, hide)
 
 def rmvx(name, mark, path, new, hide):
