@@ -3,5 +3,5 @@
     "md":"{path}/mark",
     "editor":"/usr/bin/vim",
     "extend":["ls"],
-    "shell":"{ext} {mark} {name}.md"
+    "shell":"{ext} {mark}/{name}.md"
 }

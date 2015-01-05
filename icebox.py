@@ -19,59 +19,62 @@ def strcode(string):
     if version: return isinstance(string, unicode) and string.encode('utf8') or string.decode('utf8')
     else: return string
 
-def osexec(name, path, mark, ends):
-    for ext in setting['extend']:
-        system(strcode(setting['shell'].format(
-            name=name, path=path, ext=strcode(ext), mark=mark
-        )))
-    else: exit('[!] {end}完成!'.format(end=ends))
+class icebox(object):
+    def __init__(self, name, setting):
+        self.name = name
+        self.path = setting['path']
+        self.mark = setting['md'].format(path=self.path)
+        self.markfile = '{mark}/{name}.md'.format(mark=self.mark, name=self.name)
+        self.blogfile = '{path}/blog.json'.format(path=self.path)
+        (self.hide, self.editor, self.extend, self.shell) = (
+            (self.name[0] == '@'), setting['editor'], setting['extend'], setting['shell'])
 
-def additem(name, path):
-    item = loads(open('{path}/blog.json'.format(path=path)).read())
-    if name in item: item.pop(item.index(name))
-    item.append(name)
-    open('{path}/blog.json'.format(path=path), 'w').write(dumps(item))
+    def osexec(self, ends):
+        for ext in self.extend:
+            system(strcode(self.shell.format(
+                name=self.name, path=self.path, ext=strcode(ext), mark=self.mark
+            )))
+        else: exit('[!] {end}完成!'.format(end=ends))
 
-def editor(name, mark):
-    checkhash = (lambda x: md5(open(x, 'rb').read()).hexdigest())
-    markpath = '{mark}/{name}.md'.format(mark=mark, name=name)
-    MD5 = checkhash(markpath)
+    def additem(self):
+        item = loads(open(self.blogfile, 'r').read())
+        if self.name in item: item.pop(item.index(self.name))
+        item.append(self.name)
+        open(self.blogfile, 'w').write(dumps(item))
 
-    command = (setting['editor'], markpath)
-    try: popen(command).wait()#FIXME    使用Gvim的话，会不等待，往下执行。
-    except Exception: system(' '.join(command))
+    def edit(self):
+        checkhash = (lambda x: md5(open(x, 'rb').read()).hexdigest())
+        MD5 = checkhash(self.markfile)
 
-    if MD5 == checkhash(markpath): return True
-    else: False
+        command = (self.editor, self.markfile)
+        try: popen(command).wait()#FIXME    使用Gvim的话，会不等待，往下执行。
+        except Exception: system(' '.join(command))
 
-def rmvx(name, mark, path, newname, hide):
-    item = loads(open('{path}/blog.json'.format(path=path)).read())
-    if not newname:
-        if not hide: del item[item.index(name)]
-        remove('{mark}/{name}.md'.format(mark=mark, name=name))
-    else:
-        if not hide:
-            item[item.index(name)] = newname
-        rename(
-            '{mark}/{name}.md'.format(mark=mark, name=name),
-            '{mark}/{name}.md'.format(mark=mark, name=newname)
-        )
+        return True if MD5 == checkhash(self.markfile) else False
 
-    if not hide: open('{path}/blog.json'.format(path=path), 'w').write(strcode(dumps(item)))
-    osexec(name, path, mark, ('重名' if newname else '删除'))
+    def rmvx(self, newname):
+        item = loads(open(self.blogfile, 'r').read())
+        if not newname:
+            if not self.hide: del item[item.index(self.name)]
+            remove(self.markfile)
+        else:
+            if not self.hide: item[item.index(self.name)] = newname
+            rename(self.markfile, '{mark}/{name}.md'.format(mark=self.mark, name=newname))
+
+        if not self.hide: open(self.blogfile, 'w').write(strcode(dumps(item)))
+        self.osexec(('重名' if newname else '删除'))
 
 def main(name, rmv=False):
-    path = setting['path']
-    mark, hide = setting['md'].format(path=path), (name[0]=='@')
-    if not '{name}.md'.format(name=name) in listdir(mark):
+    ed = icebox(name, setting)
+    if not '{name}.md'.format(name=ed.name) in listdir(ed.mark):
         if rmv is False:
             vi = "# {name}\n## *{time}*\n\n".format(name=name, time=ctime())
-            open('{mark}/{name}.md'.format(mark=mark, name=name), 'w').write(strcode(vi))
-    elif rmv != False: rmvx(name, mark, path, (rmv and strcode(rmv)), hide)
+            open(ed.markfile, 'w').write(strcode(vi))
+    elif rmv != False: ed.rmvx(rmv and strcode(rmv))
     if rmv != False: exit('[x] 未找到该文章.')
 
-    if not (editor(name, mark) or hide): additem(name, path)
-    osexec(name, path, mark, '')
+    if not (ed.edit() or ed.hide): ed.additem()
+    ed.osexec('')
 
 if __name__ == '__main__':
     parser = OptionParser(usage='Usage: %prog [options] Name')
