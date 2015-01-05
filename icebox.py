@@ -71,7 +71,7 @@ def main(name, rmv=False):
     elif rmv != False: rmvx(name, mark, path, (rmv and strcode(rmv)), hide)
     if rmv != False: exit('[x] 未找到该文章.')
 
-    if not (hide or editor(name, mark)): additem(name, path)
+    if not (editor(name, mark) or hide): additem(name, path)
     osexec(name, path, mark, '')
 
 if __name__ == '__main__':
