@@ -26,16 +26,13 @@ def osexec(name, path, mark, ends):
         )))
     else: exit('[!] {end}完成!'.format(end=ends))
 
-def additem(name, path, mark, hide):
-    if not hide:
-        item = loads(open('{path}/blog.json'.format(path=path)).read())
-        if name in item: item.pop(item.index(name))
-        item.append(name)
-        open('{path}/blog.json'.format(path=path), 'w').write(dumps(item))
+def additem(name, path):
+    item = loads(open('{path}/blog.json'.format(path=path)).read())
+    if name in item: item.pop(item.index(name))
+    item.append(name)
+    open('{path}/blog.json'.format(path=path), 'w').write(dumps(item))
 
-    osexec(name, path, mark, '')
-
-def editor(name, mark, path, hide):
+def editor(name, mark):
     checkhash, markpath = md5(), '{mark}/{name}.md'.format(mark=mark, name=name)
     checkhash.update(open(markpath, 'rb').read())
     MD5 = checkhash.hexdigest()
@@ -45,29 +42,28 @@ def editor(name, mark, path, hide):
     except Exception: system(' '.join(command))
 
     checkhash.update(open(markpath, 'rb').read())
-    if MD5 == checkhash.hexdigest(): hide = True
-    additem(name, path, mark, hide)
+    if MD5 == checkhash.hexdigest(): return True
+    else: False
 
-def rmvx(name, mark, path, new, hide):
+def rmvx(name, mark, path, newname, hide):
     item = loads(open('{path}/blog.json'.format(path=path)).read())
-    if not new:
+    if not newname:
         if not hide: del item[item.index(name)]
         remove('{mark}/{name}.md'.format(mark=mark, name=name))
     else:
         if not hide:
-            item[item.index(name)] = new
+            item[item.index(name)] = newname
         rename(
             '{mark}/{name}.md'.format(mark=mark, name=name),
-            '{mark}/{name}.md'.format(mark=mark, name=new)
+            '{mark}/{name}.md'.format(mark=mark, name=newname)
         )
 
     if not hide: open('{path}/blog.json'.format(path=path), 'w').write(strcode(dumps(item)))
-    osexec(name, path, mark, ('重名' if new else '删除'))
+    osexec(name, path, mark, ('重名' if newname else '删除'))
 
 def main(name, rmv=False):
     path = setting['path']
-    mark = setting['md'].format(path=path)
-    hide = (name[0]=='@')
+    mark, hide = setting['md'].format(path=path), (name[0]=='@')
     if not '{name}.md'.format(name=name) in listdir(mark):
         if rmv is False:
             vi = "# {name}\n## *{time}*\n\n".format(name=name, time=ctime())
@@ -75,7 +71,8 @@ def main(name, rmv=False):
     elif rmv != False: rmvx(name, mark, path, (rmv and strcode(rmv)), hide)
     if rmv != False: exit('[x] 未找到该文章.')
 
-    editor(name, mark, path, hide)
+    if not (hide or editor(name, mark)): additem(name, path)
+    osexec(name, path, mark, '')
 
 if __name__ == '__main__':
     parser = OptionParser(usage='Usage: %prog [options] Name')
