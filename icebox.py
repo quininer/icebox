@@ -33,16 +33,15 @@ def additem(name, path):
     open('{path}/blog.json'.format(path=path), 'w').write(dumps(item))
 
 def editor(name, mark):
-    checkhash, markpath = md5(), '{mark}/{name}.md'.format(mark=mark, name=name)
-    checkhash.update(open(markpath, 'rb').read())
-    MD5 = checkhash.hexdigest()
+    checkhash = (lambda x: md5(open(x, 'rb').read()).hexdigest())
+    markpath = '{mark}/{name}.md'.format(mark=mark, name=name)
+    MD5 = checkhash(markpath)
 
     command = (setting['editor'], markpath)
     try: popen(command).wait()#FIXME    使用Gvim的话，会不等待，往下执行。
     except Exception: system(' '.join(command))
 
-    checkhash.update(open(markpath, 'rb').read())
-    if MD5 == checkhash.hexdigest(): return True
+    if MD5 == checkhash(markpath): return True
     else: False
 
 def rmvx(name, mark, path, newname, hide):
