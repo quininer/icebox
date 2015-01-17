@@ -26,15 +26,15 @@ class icebox(object):
         self.mark = setting['md'].format(path=self.path)
         self.markfile = '{mark}/{name}.md'.format(mark=self.mark, name=self.name)
         self.blogfile = '{path}/blog.json'.format(path=self.path)
-        (self.hide, self.editor, self.extend, self.shell) = (
-            (self.name[0] == '@'), setting['editor'], setting['extend'], setting['shell'])
+        (self.hide, self.editor, self.extend) = (
+            (self.name[0] == '@'), setting['editor'], setting['extend'])
 
-    def osexec(self, ends):
+    def osexec(self, action, rename=''):
         for ext in self.extend:
-            system(strcode(self.shell.format(
-                name=self.name, path=self.path, ext=strcode(ext), mark=self.mark
+            system(strcode(self.extend[ext].format(
+                name=self.name, path=self.path, ext=strcode(ext), action=action, rename=rename
             )))
-        else: exit('[!] {end}完成!'.format(end=ends))
+        else: exit('[!] {end}完成!'.format(end=action))
 
     def additem(self):
         item = loads(open(self.blogfile, 'r').read())
@@ -55,14 +55,14 @@ class icebox(object):
     def rmvx(self, newname):
         item = loads(open(self.blogfile, 'r').read())
         if not newname:
-            if not self.hide: del item[item.index(self.name)]
             remove(self.markfile)
+            if not self.hide: del item[item.index(self.name)]
         else:
-            if not self.hide: item[item.index(self.name)] = newname
             rename(self.markfile, '{mark}/{name}.md'.format(mark=self.mark, name=newname))
+            if not self.hide: item[item.index(self.name)] = newname
 
         if not self.hide: open(self.blogfile, 'w').write(strcode(dumps(item)))
-        self.osexec(('重名' if newname else '删除'))
+        self.osexec(('rename' if newname else 'delete'), newname)
 
 def main(name, rmv=False):
     ed = icebox(name, setting)
@@ -73,8 +73,9 @@ def main(name, rmv=False):
     elif rmv != False: ed.rmvx(rmv and strcode(rmv))
     if rmv != False: exit('[x] 未找到该文章.')
 
-    if not (ed.edit() or ed.hide): ed.additem()
-    ed.osexec('')
+    if not (ed.edit() or ed.hide):
+        ed.additem()
+        ed.osexec('add', name)
 
 if __name__ == '__main__':
     parser = OptionParser(usage='Usage: %prog [options] Name')

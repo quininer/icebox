@@ -2,6 +2,7 @@
     "path":"/home/user/icebox/out",
     "md":"{path}/mark",
     "editor":"/usr/bin/vim",
-    "extend":["ls"],
-    "shell":"{ext} {mark}/{name}.md"
+    "extend":{
+        "/home/user/icebox/plugins/rss.py":"{ext} -a {action} -p {path} -n {name} -r {rename}"
+    }
 }

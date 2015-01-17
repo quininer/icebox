@@ -4,8 +4,6 @@ from lxml import etree
 from time import ctime
 from os.path import isfile
 
-version = 1.0
-
 class rssgen(object):
     """
     RSS Generator library...
@@ -17,7 +15,7 @@ class rssgen(object):
     >>> feed.delitem('1')
     """
 
-    version = version
+    version = 1.0
     channel = {}
 
     def __init__(self, path):
@@ -44,7 +42,7 @@ class rssgen(object):
         channels['description'] = description
         channels['pubDate'] = channels['pubDate'] if 'pubDate' in channels  else ctime()
         channels['lastBuildDate'] = channels['lastBuildDate'] if 'lastBuildDate' in channels else ctime()
-        channels['generator'] = channels['generator'] if 'generator' in channels else "rssgen {}".format(version)
+        channels['generator'] = channels['generator'] if 'generator' in channels else "rssgen {}".format(self.version)
         self.channel = channels
 
         self.feed = etree.Element('rss', {'version':'2.0'})
@@ -60,6 +58,7 @@ class rssgen(object):
         items['link'] = link
         items['description'] = description
         items['guid'] = guid
+        items['pubDate'] = items['pubDate'] if 'pubDate' in items else ctime()
 
         item = etree.Element('item')
         for node in items:
