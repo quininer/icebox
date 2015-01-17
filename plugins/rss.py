@@ -40,10 +40,10 @@ def del_item(feed, guid):
 
 def rename_item(feed, guid, rename):
     try:
-        del_item(guid)
+        del_item(feed, guid)
     except Exception:
         pass
-    add_item(rename)
+    add_item(feed, rename)
 
 def main(args):
     if not (args.action or args.path and args.name):
