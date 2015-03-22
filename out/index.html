@@ -1,68 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head id='head'>
+    <head>
         <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
         <script>if(document.location.protocol == 'http:')document.location.protocol = 'https';</script>
-        <script src='./static/jquery/build/jquery.min.js'></script>
+        <title>icebox</title>
+        <script src='./static/ice.js'></script>
+        <script src='./static/marked/marked.min.js'></script>
+        <script src='./static/main.js' async></script>
     </head>
     <body>
         <style scoped>
-            ul {
+            #list {
                 font-size: 1.2em;
             }
-            h1 {
+            #name {
                 font-size: 3.6em;
             }
-            .it {
+            #it {
                 font-size: 0.5em;
                 float: right;
             }
         </style>
-        <h1><strong id='name'>icebox</strong></h1>
-        <ul id='list'></ul>
-        <div class='it'></div>
-        <script>
-            $.getJSON('./config.json')
-            .done(function(config){
-                $('#head').append($('<title>').text(config['name']));
-                $('#name').text(config['name']);
-                $.each(config['style'], function(_, link){
-                    $('#head').append($('<link>').attr({
-                        "rel":"stylesheet",
-                        "type":"text/css",
-                        "href":link
-                    }));
-                })
-                $.each(config['links'], function(_, links){
-                    $('div.it').append($('<p>'));
-                    $.each(links, function(_, link){
-                        $('div.it p:last-child').append(
-                            $('<a>').text(link.name).attr('href', link.href)
-                        );
-                    });
-                });
-                $.getJSON('./blog.json')
-                .done(function(items){
-                    if(!items){
-                        return $('#list').append(
-                            $('<li>').text('作者太懒，一篇文章都没有...')
-                        );
-                    };
-                    $.each(items.reverse(), function(_, item){
-                        $('#list').append(
-                            $('<li>').html(
-                                $('<a>').text(item).attr('href', './mark.html?'+item)
-                            )
-                        );
-                    })
-                })
-                .fail(function(){
-                    $('#list').append($('<li>').text('貌似blog.json加载错误了？'))
-                });
-            })
-            .fail(function(){
-                $('#list').append($('<li>').text('貌似config.json加载错误了？'))
-            });
-        </script>
+        <header>
+            <h1><strong id='name'>icebox</strong></h1>
+        </header>
+        <section>
+            <ul id='list'></ul>
+            <noscript>If you can, please turn JavaScript support. :)</noscript>
+            <div id='main'></div>
+        </section>
+        <footer>
+            <div id='it'></div>
+            <div id="disqus_thread"></div>
+        </footer>
     </body>
 </html>
