@@ -41,7 +41,7 @@ var load = {
                                 load.mark(this.attributes['data-href'].value);
                             })
                         )
-                    )
+                    );
                 });
             }, console.error).catch(console.error);
             if(page){

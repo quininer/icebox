@@ -39,7 +39,7 @@ $ = {
             return this;
         };
         w.HTMLElement.prototype.content = function(text){
-            this.innerText = text;
+            this.textContent = text;
             return this;
         };
     },
