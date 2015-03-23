@@ -6,8 +6,8 @@ $ = {
                     this.attachEvent(`on${name}`, foo));
             return this;
         };
-        w.HTMLElement.prototype.add = function(e){
-            this.appendChild(e);
+        w.HTMLElement.prototype.add = function(){
+            for(var e of arguments)this.appendChild(e);
             return this;
         };
         w.HTMLElement.prototype.app = function(html, p){
@@ -45,69 +45,68 @@ $ = {
     },
 
     http: function(url){
-        var ajax = function(method, args){
-            /*
-             *  ajax
-             *      url, query, body, headers, realbody, async
-             * */
-            return new Promise(function(resolve, reject){
-                var xhr = new XMLHttpRequest();
-                var query = '',
-                    body = '';
-                //XXX
-                if((args.query != undefined)){
-                    for(var q in args.query){
-                        query += `${encodeURIComponent(q)}=${encodeURIComponent(escape(args.query[q]))}&`;
+        return {
+            ajax: function(method, args){
+                /*
+                 *  ajax
+                 *      url, query, body, headers, realbody, async
+                 * */
+                return new Promise(function(resolve, reject){
+                    //XXX use fatch API
+                    var xhr = new XMLHttpRequest();
+                    var query = '',
+                        body = '';
+                    //XXX
+                    if((args.query != undefined)){
+                        for(var q in args.query){
+                            query += `${encodeURIComponent(q)}=${encodeURIComponent(escape(args.query[q]))}&`;
+                        };
                     };
-                };
-                if((args.body != undefined)&&!args.realbody){
-                    for(var q in args.body){
-                        body += `${encodeURIComponent(q)}=${encodeURIComponent(escape(args.body[q]))}&`;
+                    if((args.body != undefined)&&!args.realbody){
+                        for(var q in args.body){
+                            body += `${encodeURIComponent(q)}=${encodeURIComponent(escape(args.body[q]))}&`;
+                        };
+                    }else{
+                        body = args.body;
                     };
-                }else{
-                    body = args.body;
-                };
 
-                if(!~args.url.indexOf('?')&&query){
-                    args.url = `${args.url}?${query.slice(0, -1)}`;
-                };
-                xhr.open(method, args.url, (args.async === false)?false:true);
-                if((args.headers != undefined)){
-                    for(var header in args.headers){
-                        xhr.setRequestHeader(header, args.headers[header]);
-                    }
-                };
-                xhr.onreadystatechange = function(){
-                    if(this.readyState == 4){
-                        if(this.status == 200){
-                            this.text = this.responseText;
-                            try{
-                                this.json = JSON.parse(this.text);
-                            }catch(e){};
-                            resolve(this);
-                        }else{
-                            this.text = this.responseText;
-                            try{
-                                this.json = JSON.parse(this.text);
-                            }catch(e){};
-                            reject({
-                                'error':this.statusText,
-                                'xhr':this
-                            });
+                    if(!~args.url.indexOf('?')&&query){
+                        args.url = `${args.url}?${query.slice(0, -1)}`;
+                    };
+                    xhr.open(method, args.url, (args.async === false)?false:true);
+                    if((args.headers != undefined)){
+                        for(var header in args.headers){
+                            xhr.setRequestHeader(header, args.headers[header]);
                         }
                     };
-                };
-                xhr.send(body);
-            });
-        }
-
-        return {
-            ajax: ajax,
+                    xhr.onreadystatechange = function(){
+                        if(this.readyState == 4){
+                            if(this.status == 200){
+                                this.text = this.responseText;
+                                try{
+                                    this.json = JSON.parse(this.text);
+                                }catch(e){};
+                                resolve(this);
+                            }else{
+                                this.text = this.responseText;
+                                try{
+                                    this.json = JSON.parse(this.text);
+                                }catch(e){};
+                                reject({
+                                    'error':this.statusText,
+                                    'xhr':this
+                                });
+                            }
+                        };
+                    };
+                    xhr.send(body);
+                });
+            },
             get: function(args){
                 if(!args)args = {};
                 //XXX use es6 Default parameters
                 if(!args.url)args.url = url;
-                return ajax('GET', args);
+                return this.ajax('GET', args);
             },
             post: function(args){
                 if(!args)args = {};
@@ -116,17 +115,13 @@ $ = {
                 if(!args.headers||!args.headers['Content-type']){
                     args.headers['Content-type'] = "application/x-www-form-urlencoded";
                 };
-                return ajax('POST', args);
+                return this.ajax('POST', args);
             }
-        }
+        };
     },
     dom: function(setr, attr){
-        if(!!~setr.indexOf('<')){
-            var e = document.createElement(setr.slice(1, -1));
-            return e.attr(attr);
-        }else{
-            return document.querySelector(setr);
-        };
+        //XXX use es6 Arrow function
+        return (!!~setr.indexOf('<'))?document.createElement(setr.slice(1, -1)).attr(attr):document.querySelector(setr);
     },
     doms: function(selector){
         return document.querySelectorAll(selector);
