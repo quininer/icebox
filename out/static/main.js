@@ -59,6 +59,15 @@ var load = {
         }else{
             this.pages();
         };
+
+        window.onpopstate = function(event){
+            var page = window.decodeURIComponent(document.location.search.substring(1));
+            if(page){
+                load.mark(page);
+            }else{
+                load.home();
+            };
+        };
     },
     'home': function(){
         var title = JSON.parse(window.sessionStorage.getItem('config')).name;
@@ -76,7 +85,7 @@ var load = {
     },
     'mark': function(page){
         $.dom('head > title').content(page);
-        window.history.replaceState({}, '', `?${page}`);
+        window.history.pushState({}, '', `?${page}`);
         for(var e of ['#main', '#disqus_thread']){
             $.dom(e).show();
         };
@@ -86,13 +95,11 @@ var load = {
         $.http(`./mark/${page}.md`).get().then(function(res){
             $.dom('#main').inner(marked(res.text));
             $.dom('#main > h1').on('click', function(){
-                window.history.replaceState({}, '', '/');
+                window.history.pushState({}, '', '/');
                 load.home();
             });
+            load.disqus();
         }, function(err){
-            console.error(err);
-            $.dom('#main').inner(marked("# ( ・_・)"));
-        }).then(load.disqus, function(err){
             console.error(err);
             $.dom('#main').inner(marked("# ( ・_・)"));
         }).catch(console.error);
