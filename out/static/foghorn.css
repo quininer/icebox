@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Vollkorn:400,400italic,700,700italic&subset=latin);
+@import url(./Vollkorn.css);
 
 ::selection { background-color:#CCC; }
 ::-webkit-scrollbar {
@@ -115,7 +115,7 @@ a:hover {
     text-decoration: underline;
 }
 a img {
-    border:none;
+    border: none;
 }
 h1 a, h1 a:hover {
     color: #333;
@@ -138,6 +138,10 @@ p#heart{
 }
 .red {
     color:#B50000;
+}
+
+img {
+    width: 100%;
 }
 
 /* Home Page

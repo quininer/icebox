@@ -3,11 +3,9 @@ var load = {
         var page = window.decodeURIComponent(document.location.search.substring(1));
         this.pages = function(){
             var config = JSON.parse(window.sessionStorage.getItem('config'));
-            if($.doms('link').length){
-                $.doms('link').forEach(function(e){
-                    e.del();
-                });
-            };
+            Array.prototype.forEach.call($.doms('link'), function(e){
+                e.del();
+            });
             config.style.forEach(function(link){
                 $.dom('head').add(
                     $.dom('<link>', {
