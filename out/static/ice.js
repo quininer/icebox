@@ -7,7 +7,7 @@ $ = {
             return this;
         };
         w.HTMLElement.prototype.add = function(){
-            for(var e of arguments)this.appendChild(e);
+            for(var e of Array.prototype.slice.call(arguments))this.appendChild(e);
             return this;
         };
         w.HTMLElement.prototype.app = function(html, p){
