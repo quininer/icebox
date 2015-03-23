@@ -89,11 +89,13 @@ var load = {
                 window.history.replaceState({}, '', '/');
                 load.home();
             });
-            //TODO back home
         }, function(err){
             console.error(err);
             $.dom('#main').inner(marked("# ( ・_・)"));
-        }).then(load.disqus, console.error).catch(console.error);
+        }).then(load.disqus, function(err){
+            console.error(err);
+            $.dom('#main').inner(marked("# ( ・_・)"));
+        }).catch(console.error);
     },
     'disqus': function(){
         var disqus_shortname = JSON.parse(window.sessionStorage.getItem('config')).disqus;
