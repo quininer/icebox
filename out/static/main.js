@@ -3,9 +3,8 @@ var load = {
         var page = window.decodeURIComponent(document.location.search.substring(1));
         this.pages = function(){
             var config = JSON.parse(window.sessionStorage.getItem('config'));
-            var csslinks = $.doms('link');
-            if(csslinks.length){
-                csslinks.forEach(function(e){
+            if($.doms('link').length){
+                $.doms('link').forEach(function(e){
                     e.del();
                 });
             };
@@ -76,11 +75,11 @@ var load = {
         var title = JSON.parse(window.sessionStorage.getItem('config')).name;
         $.dom('head > title').content(title);
         for(var e of ['body > header', '#list', '#it']){
+            //XXX es6 let
             $.dom(e).show();
         };
         for(var e of ['#disqus_thread', "#main"]){
             var d = $.dom(e);
-            //XXX ues es6 let
             if(d){
                 d.del().add($.dom('<div>', {'id':e.substring(1)}).hide());
             };
