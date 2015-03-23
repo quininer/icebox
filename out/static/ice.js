@@ -30,12 +30,12 @@ $ = {
             if(this.style.display != 'none')this.style.display = 'none';
             return this;
         };
-        w.HTMLElement.prototype.inner = function(html){
-            this.innerHTML = html;
-            return this;
-        };
         w.HTMLElement.prototype.show = function(html){
             if(this.style.display == 'none')this.style.display = 'block';
+            return this;
+        };
+        w.HTMLElement.prototype.inner = function(html){
+            this.innerHTML = html;
             return this;
         };
         w.HTMLElement.prototype.content = function(text){
@@ -61,19 +61,21 @@ $ = {
                         for(var q in args.query){
                             query += `${encodeURIComponent(q)}=${encodeURIComponent(escape(args.query[q]))}&`;
                         };
+                        query = query.slice(0, -1);
                     };
                     if((args.body != undefined)&&!args.realbody){
                         for(var q in args.body){
                             body += `${encodeURIComponent(q)}=${encodeURIComponent(escape(args.body[q]))}&`;
                         };
+                        body = body.slice(0, -1);
                     }else{
                         body = args.body;
                     };
 
-                    if(!~args.url.indexOf('?')&&query){
-                        args.url = `${args.url}?${query.slice(0, -1)}`;
+                    if(!~args.url.indexOf('?')&&!!query){
+                        args.url = `${args.url}?${query}`;
                     };
-                    xhr.open(method, args.url, (args.async === false)?false:true);
+                    xhr.open(method, args.url, (args.async===undefined||!!args.async)||false);
                     if((args.headers != undefined)){
                         for(var header in args.headers){
                             xhr.setRequestHeader(header, args.headers[header]);
@@ -96,7 +98,7 @@ $ = {
                                     'error':this.statusText,
                                     'xhr':this
                                 });
-                            }
+                            };
                         };
                     };
                     xhr.send(body);
@@ -110,7 +112,6 @@ $ = {
             },
             post: function(args){
                 if(!args)args = {};
-                //XXX use es6 Default parameters
                 if(!args.url)args.url = url;
                 if(!args.headers||!args.headers['Content-type']){
                     args.headers['Content-type'] = "application/x-www-form-urlencoded";

@@ -8,7 +8,7 @@ var load = {
                 csslinks.forEach(function(e){
                     e.del();
                 });
-            }
+            };
             config.style.forEach(function(link){
                 $.dom('head').add(
                     $.dom('<link>', {
@@ -23,8 +23,9 @@ var load = {
                 $.dom('#it').add($.dom('<p>'));
                 links.forEach(function(link){
                     $.dom('#it p:last-child').add(
-                        $.dom('<a>', link).content(link.name).on('click', function(){
+                        $.dom('<a>', link).content(link.name).on('click', function(e){
                             if(this.attributes['data-href']){
+                                e.preventDefault();
                                 load.mark(this.attributes['data-href'].value);
                             };
                         })
@@ -36,8 +37,10 @@ var load = {
                     $.dom('#list').add(
                         $.dom('<li>').add(
                             $.dom('<a>', {
-                                'data-href':page
-                            }).content(page).on('click', function(){
+                                'data-href':page,
+                                'href':`?${page}`
+                            }).content(page).on('click', function(e){
+                                e.preventDefault();
                                 load.mark(this.attributes['data-href'].value);
                             })
                         )
@@ -94,7 +97,11 @@ var load = {
         };
         $.http(`./mark/${page}.md`).get().then(function(res){
             $.dom('#main').inner(marked(res.text));
-            $.dom('#main > h1').on('click', function(){
+            $.dom('#main > h1').on('mouseover', function(){
+                this.style.color = '#2484c1';
+            }).on('mouseout', function(){
+                this.style.color = null;
+            }).on('click', function(){
                 window.history.pushState({}, '', '/');
                 load.home();
             });
