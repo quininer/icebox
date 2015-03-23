@@ -121,7 +121,7 @@ $ = {
     },
     dom: function(setr, attr){
         //XXX use es6 Arrow function
-        return (!!~setr.indexOf('<'))?document.createElement(setr.slice(1, -1)).attr(attr):document.querySelector(setr);
+        return (~setr.indexOf('<')&&setr.slice(-1)=='>')?document.createElement(setr.slice(1, -1)).attr(attr):document.querySelector(setr);
     },
     doms: function(selector){
         return document.querySelectorAll(selector);
