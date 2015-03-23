@@ -97,14 +97,16 @@ var load = {
         };
         $.http(`./mark/${page}.md`).get().then(function(res){
             $.dom('#main').inner(marked(res.text));
-            $.dom('#main > h1').on('mouseover', function(){
-                this.style.color = '#2484c1';
-            }).on('mouseout', function(){
-                this.style.color = null;
-            }).on('click', function(){
-                window.history.pushState({}, '', '/');
-                load.home();
-            });
+            try{
+                $.dom('#main > h1').on('mouseover', function(){
+                    this.style.color = '#2484c1';
+                }).on('mouseout', function(){
+                    this.style.color = null;
+                }).on('click', function(){
+                    window.history.pushState({}, '', '/');
+                    load.home();
+                });
+            }catch(e){};
             load.disqus();
         }, function(err){
             console.error(err);
