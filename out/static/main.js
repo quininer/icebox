@@ -48,7 +48,7 @@ var load = {
                 });
             }, console.error).catch(console.error);
             if(page){
-                load.mark(page);
+                load.mark(page, false);
             }else{
                 load.home();
             };
@@ -66,7 +66,7 @@ var load = {
         window.onpopstate = function(event){
             var page = window.decodeURIComponent(document.location.search.substring(1));
             if(page){
-                load.mark(page);
+                load.mark(page, false);
             }else{
                 load.home();
             };
@@ -86,9 +86,10 @@ var load = {
             };
         };
     },
-    'mark': function(page){
+    'mark': function(page, push){
+        //XXX  es6 Default
         $.dom('head > title').content(page);
-        window.history.pushState({}, '', `?${page}`);
+        if(push===undefined||!!push)window.history.pushState({}, '', `?${page}`);
         for(var e of ['#main', '#disqus_thread']){
             $.dom(e).show();
         };
