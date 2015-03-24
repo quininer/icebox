@@ -83,7 +83,7 @@ $ = {
                     };
                     xhr.onreadystatechange = function(){
                         if(this.readyState == 4){
-                            if(this.status == 200){
+                            if(this.status===200||this.status===0){// 0 when files are loaded locally (e.g., cordova/phonegap app.)
                                 this.text = this.responseText;
                                 try{
                                     this.json = JSON.parse(this.text);
