@@ -1,9 +1,16 @@
 var load = {
+    '_link':function(e){
+        if(this.attributes['data-href']){
+            e.preventDefault();
+            load.mark(this.attributes['data-href'].value);
+        };
+    },
+
     'init': function(){
         var page = window.decodeURIComponent(document.location.search.substring(1));
         this.pages = function(){
             var config = JSON.parse(window.sessionStorage.getItem('config'));
-            Array.prototype.forEach.call($.doms('link'), function(e){
+            Array.prototype.forEach.call($.query('link'), function(e){
                 e.del();
             });
             config.style.forEach(function(link){
@@ -20,12 +27,7 @@ var load = {
                 $.dom('#it').add($.dom('<p>'));
                 links.forEach(function(link){
                     $.dom('#it p:last-child').add(
-                        $.dom('<a>', link).content(link.name).on('click', function(e){
-                            if(this.attributes['data-href']){
-                                e.preventDefault();
-                                load.mark(this.attributes['data-href'].value);
-                            };
-                        })
+                        $.dom('<a>', link).content(link.name).on('click', load._link)
                     ).app(' - ', 'beforeend');
                 });
             });
@@ -36,10 +38,7 @@ var load = {
                             $.dom('<a>', {
                                 'data-href':page,
                                 'href':`?${page}`
-                            }).content(page).on('click', function(e){
-                                e.preventDefault();
-                                load.mark(this.attributes['data-href'].value);
-                            })
+                            }).content(page).on('click', load._link)
                         )
                     );
                 });

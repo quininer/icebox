@@ -30,7 +30,7 @@ $ = {
             if(this.style.display != 'none')this.style.display = 'none';
             return this;
         };
-        w.HTMLElement.prototype.show = function(html){
+        w.HTMLElement.prototype.show = function(){
             if(this.style.display == 'none')this.style.display = 'block';
             return this;
         };
@@ -124,7 +124,7 @@ $ = {
         //XXX use es6 Arrow function
         return (~setr.indexOf('<')&&setr.slice(-1)=='>')?document.createElement(setr.slice(1, -1)).attr(attr):document.querySelector(setr);
     },
-    doms: function(selector){
+    query: function(selector){
         return document.querySelectorAll(selector);
     }
 };

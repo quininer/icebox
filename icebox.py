@@ -50,7 +50,7 @@ class icebox(object):
         try: popen(command).wait()#FIXME    使用Gvim的话，会不等待，往下执行。
         except Exception: system(' '.join(command))
 
-        return True if MD5 == checkhash(self.markfile) else False
+        return MD5 == checkhash(self.markfile)
 
     def rmvx(self, newname):
         item = loads(open(self.blogfile, 'r').read())
