@@ -26,17 +26,26 @@
         </header>
         <section>
             <ul id='list'></ul>
-            <noscript>If you can, please turn JavaScript support. :)</noscript>
-            <div id='alert'>
-                <p>This blog uses some ES6 syntax, outdated browser may not be resolved.<p>
-            </div>
-            <div id='main'></div>
         </section>
+        <section>
+            <noscript>If you can, please turn JavaScript support. :)</noscript>
+        </section>
+        <section id="warning">
+            <p>This blog uses some ES6 syntax, outdated browser may not be resolved.<p>
+        </section>
+        <section id='main'></section>
         <footer>
             <div id='it'></div>
             <div id="disqus_thread"></div>
             <script>
-                $.dom('#alert').del();
+                try{
+                    $.dom('#warning').del();
+                }catch(e){
+                    var name = window.decodeURIComponent(document.location.search.substring(1));
+                    if(!!name){
+                        //
+                    };
+                };
             </script>
         </footer>
     </body>
