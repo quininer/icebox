@@ -77,9 +77,7 @@ var load = {
         };
         for(var e of ['#disqus_thread', "#main"]){
             var d = $.dom(e);
-            if(d){
-                d.del().add($.dom('<div>', {'id':e.substring(1)}).hide());
-            };
+            if(d)d.del().add($.dom('<div>', {'id':e.substring(1)}).hide());
         };
     },
     'mark': function(page, push){
