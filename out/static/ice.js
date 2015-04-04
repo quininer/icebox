@@ -46,6 +46,13 @@ $ = {
 
     http: function(url){
         return {
+            enurl: function(o){
+                if(typeof url != 'string')url = '';
+                for(var q in o){
+                    url += `${encodeURIComponent(q)}=${encodeURIComponent(escape(o[q]))}&`;
+                };
+                return url.slice(0, -1);
+            },
             ajax: function(method, args){
                 /*
                  *  ajax
@@ -54,28 +61,13 @@ $ = {
                 return new Promise(function(resolve, reject){
                     //XXX use fatch API
                     var xhr = new XMLHttpRequest();
-                    var query = '',
-                        body = '';
-                    //XXX
-                    if((args.query != undefined)){
-                        for(var q in args.query){
-                            query += `${encodeURIComponent(q)}=${encodeURIComponent(escape(args.query[q]))}&`;
-                        };
-                        query = query.slice(0, -1);
-                    };
-                    if((args.body != undefined)&&!args.realbody){
-                        for(var q in args.body){
-                            body += `${encodeURIComponent(q)}=${encodeURIComponent(escape(args.body[q]))}&`;
-                        };
-                        body = body.slice(0, -1);
-                    }else{
-                        body = args.body;
-                    };
 
-                    if(!~args.url.indexOf('?')&&!!query){
-                        args.url = `${args.url}?${query}`;
+                    if(args.query != undefined)args.query = $.http().enurl(args.query);
+                    if((args.body != undefined)&&!args.realbody)args.body = $.http().enurl(args.body);
+                    if(!~args.url.indexOf('?')&&!!args.query){
+                        args.url = `${args.url}?${args.query}`;
                     };
-                    xhr.open(method, args.url, (args.async===undefined||!!args.async)||false);
+                    xhr.open(method, args.url, (args.async===undefined||!!args.async));
                     if((args.headers != undefined)){
                         for(var header in args.headers){
                             xhr.setRequestHeader(header, args.headers[header]);
@@ -85,15 +77,17 @@ $ = {
                         if(this.readyState == 4){
                             if(this.status===200||this.status===0){// 0 when files are loaded locally (e.g., cordova/phonegap app.)
                                 this.text = this.responseText;
-                                try{
-                                    this.json = JSON.parse(this.text);
-                                }catch(e){};
+                                this.json = function(){
+                                    //XXX Arrow function
+                                    return JSON.parse(this.text);
+                                };
                                 resolve(this);
                             }else{
                                 this.text = this.responseText;
-                                try{
-                                    this.json = JSON.parse(this.text);
-                                }catch(e){};
+                                this.json = function(){
+                                    //XXX Arrow function
+                                    return JSON.parse(this.text);
+                                };
                                 reject({
                                     'error':this.statusText,
                                     'xhr':this
@@ -101,7 +95,7 @@ $ = {
                             };
                         };
                     };
-                    xhr.send(body);
+                    xhr.send(args.body);
                 });
             },
             get: function(args){
@@ -113,9 +107,8 @@ $ = {
             post: function(args){
                 if(!args)args = {};
                 if(!args.url)args.url = url;
-                if(!args.headers||!args.headers['Content-type']){
-                    args.headers['Content-type'] = "application/x-www-form-urlencoded";
-                };
+                if(!args.headers)args.headers = {};
+                if(!args.headers['Content-type'])args.headers['Content-type'] = "application/x-www-form-urlencoded";
                 return this.ajax('POST', args);
             }
         };

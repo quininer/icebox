@@ -32,7 +32,7 @@ var load = {
                 });
             });
             $.http('./blog.json').get().then(function(res){
-                res.json.reverse().forEach(function(page){
+                res.json().reverse().forEach(function(page){
                     $.dom('#list').add(
                         $.dom('<li>').add(
                             $.dom('<a>', {
@@ -42,7 +42,11 @@ var load = {
                         )
                     );
                 });
-            }, console.error).catch(console.error);
+            }, function(err){
+                console.error(err);
+            }).catch(function(err){
+                console.error(err);
+            });
             if(page){
                 load.mark(page, false);
             }else{
@@ -52,9 +56,15 @@ var load = {
         if(!window.sessionStorage.getItem('config')){
             $.http('./config.json').get().then(function(res){
                 window.sessionStorage.setItem('config', res.text)
-            }, console.error)
-            .then(this.pages, console.error)
-            .catch(console.error);
+            }, function(err){
+                console.error(err);
+            })
+            .then(this.pages, function(err){
+                console.error(err);
+            })
+            .catch(function(err){
+                console.error(err);
+            });
         }else{
             this.pages();
         };
@@ -92,7 +102,7 @@ var load = {
         };
         $.http(`./mark/${page}.md`).get().then(function(res){
             $.dom('#main').inner(marked(res.text));
-            try{
+            if(!!$.dom('#main > h1')){
                 $.dom('#main > h1').on('mouseover', function(){
                     this.style.color = '#2484c1';
                 }).on('mouseout', function(){
@@ -101,12 +111,14 @@ var load = {
                     window.history.pushState({}, '', '/');
                     load.home();
                 });
-            }catch(e){};
+            };
             load.disqus();
         }, function(err){
             console.error(err);
             $.dom('#main').inner(marked("# ( ・_・)"));
-        }).catch(console.error);
+        }).catch(function(err){
+            console.error(err);
+        });
     },
     'disqus': function(){
         var disqus_shortname = JSON.parse(window.sessionStorage.getItem('config')).disqus;
