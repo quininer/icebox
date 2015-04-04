@@ -46,7 +46,7 @@ $ = {
 
     http: function(url){
         return {
-            enurl: function(o){
+            urlen: function(o){
                 if(typeof url != 'string')url = '';
                 for(var q in o){
                     url += `${encodeURIComponent(q)}=${encodeURIComponent(escape(o[q]))}&`;
@@ -62,8 +62,8 @@ $ = {
                     //XXX use fatch API
                     var xhr = new XMLHttpRequest();
 
-                    if(args.query != undefined)args.query = $.http().enurl(args.query);
-                    if((args.body != undefined)&&!args.realbody)args.body = $.http().enurl(args.body);
+                    if(args.query != undefined)args.query = $.http().urlen(args.query);
+                    if((args.body != undefined)&&!args.realbody)args.body = $.http().urlen(args.body);
                     if(!~args.url.indexOf('?')&&!!args.query){
                         args.url = `${args.url}?${args.query}`;
                     };
