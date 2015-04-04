@@ -22,11 +22,11 @@ var load = {
                     })
                 );
             });
-            $.dom('#name').content(window.decodeURIComponent(config.name));
+            $.dom('.name').content(window.decodeURIComponent(config.name));
             config.links.forEach(function(links){
-                $.dom('#it').add($.dom('<p>'));
+                $.dom('.it').add($.dom('<p>'));
                 links.forEach(function(link){
-                    $.dom('#it p:last-child').add(
+                    $.dom('.it p:last-child').add(
                         $.dom('<a>', link).content(link.name).on('click', load._link)
                     ).app(' - ', 'beforeend');
                 });
@@ -81,7 +81,7 @@ var load = {
     'home': function(){
         var title = JSON.parse(window.sessionStorage.getItem('config')).name;
         $.dom('head > title').content(title);
-        for(var e of ['body > header', '#list', '#it']){
+        for(var e of ['body > header', '#list', '.it']){
             //XXX es6 let
             $.dom(e).show();
         };
@@ -97,7 +97,7 @@ var load = {
         for(var e of ['#main', '#disqus_thread']){
             $.dom(e).show();
         };
-        for(var e of ['body > header', '#list', '#it']){
+        for(var e of ['body > header', '#list', '.it']){
             $.dom(e).hide();
         };
         $.http(`./mark/${page}.md`).get().then(function(res){
