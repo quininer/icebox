@@ -48,7 +48,7 @@ $ = {
         return {
             urlen: function(mp, h){
                 var uri = '';
-                var u = $.dom('<a>').attr({"href":url||document.location.origin});
+                var u = $.dom('<a>', {"href":url||document.location.origin});
                 var vp = $.http(u.href).urlde();
                 for(var k in mp){
                     vp[k] = mp[k];
@@ -62,7 +62,7 @@ $ = {
             },
             urlde: function(s){
                 var mp = {};
-                for(var kv of (s||$.dom('<a>').attr({"href":url||document.location.href}).search.slice(1)).split('&')){
+                for(var kv of (s||$.dom('<a>', {"href":url||document.location.href}).search.slice(1)).split('&')){
                     // let and [] = []
                     var k = kv.split('=')[0],
                         v = kv.split('=')[1];
