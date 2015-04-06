@@ -7,7 +7,7 @@ var load = {
     },
 
     'init': function(){
-        var page = window.decodeURIComponent(document.location.search.substring(1));
+        var page = window.decodeURIComponent(document.location.search.slice(1));
         this.pages = function(){
             var config = JSON.parse(window.sessionStorage.getItem('config'));
             Array.prototype.forEach.call($.query('link'), function(e){
@@ -70,7 +70,7 @@ var load = {
         };
 
         window.onpopstate = function(event){
-            var page = window.decodeURIComponent(document.location.search.substring(1));
+            var page = window.decodeURIComponent(document.location.search.slice(1));
             if(page){
                 load.mark(page, false);
             }else{
@@ -87,7 +87,7 @@ var load = {
         };
         for(var e of ['#disqus_thread', "#main"]){
             var d = $.dom(e);
-            if(d)d.del().add($.dom('<div>', {'id':e.substring(1)}).hide());
+            if(d)d.del().add($.dom('<div>', {'id':e.slice(1)}).hide());
         };
     },
     'mark': function(page, push){

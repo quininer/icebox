@@ -27,11 +27,11 @@ $ = {
             return this;
         };
         w.HTMLElement.prototype.hide = function(){
-            if(this.style.display != 'none')this.style.display = 'none';
+            if(!this.hidden)this.hidden = true;
             return this;
         };
         w.HTMLElement.prototype.show = function(){
-            if(this.style.display == 'none')this.style.display = 'block';
+            if(this.hidden)this.hidden = false;
             return this;
         };
         w.HTMLElement.prototype.inner = function(html){
@@ -46,12 +46,29 @@ $ = {
 
     http: function(url){
         return {
-            urlen: function(o){
-                if(typeof url != 'string')url = '';
-                for(var q in o){
-                    url += `${encodeURIComponent(q)}=${encodeURIComponent(escape(o[q]))}&`;
+            urlen: function(mp, h){
+                var uri = '';
+                var u = $.dom('<a>').attr({"href":url||document.location.origin});
+                var vp = $.http(u.href).urlde();
+                for(var k in mp){
+                    vp[k] = mp[k];
                 };
-                return url.slice(0, -1);
+                for(var q in vp){
+                    uri += `${window.encodeURIComponent(q)}=${window.encodeURIComponent(escape(vp[q]))}&`;
+                };
+                u.search = `?${uri.slice(0, -1)}`;
+                if(!!h)u.hash = h;
+                return (!!url)?u.href:u.search.slice(1);
+            },
+            urlde: function(s){
+                var mp = {};
+                for(var kv of (s||$.dom('<a>').attr({"href":url||document.location.href}).search.slice(1)).split('&')){
+                    // let and [] = []
+                    var k = kv.split('=')[0],
+                        v = kv.split('=')[1];
+                    mp[k] = v||"";
+                };
+                return mp;
             },
             ajax: function(method, args){
                 /*
