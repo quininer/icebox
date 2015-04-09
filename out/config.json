@@ -1,7 +1,7 @@
 {
     "name":"icebox",
     "disqus":"name",
-    "style":["/static/foghorn.css"],
+    "style":["/assets/foghorn.css"],
     "script":[],
     "links":[
         [{"name":"Share it? Attribution-NonCommercial-ShareAlike","href":"https://creativecommons.org/licenses/by-nc-sa/3.0/"}]
