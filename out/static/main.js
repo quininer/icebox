@@ -22,6 +22,14 @@ var load = {
                     })
                 );
             });
+            config.script.forEach(function(link){
+                $.dom('head').add(
+                    $.dom('<script>', {
+                        "type":"text/javascript",
+                        "src":link
+                    })
+                );
+            });
             $.dom('.name').content(window.decodeURIComponent(config.name));
             config.links.forEach(function(links){
                 $.dom('.it').add($.dom('<p>'));
