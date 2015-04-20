@@ -13,7 +13,14 @@ var load = {
             Array.prototype.forEach.call($.query('link'), function(e){
                 e.del();
             });
-            $.dom('.name').content(window.decodeURIComponent(config.name));
+            $.dom('.name').on('mouseover', function(){
+                this.style.color = '#2484c1';
+            }).on('mouseout', function(){
+                this.style.color = null;
+            }).on('click', function(){
+                window.history.pushState({}, '', '/');
+                load.home();
+            });
             config.style.forEach(function(link){
                 $.dom('head').add(
                     $.dom('<link>', {
@@ -87,13 +94,15 @@ var load = {
     'home': function(){
         var title = JSON.parse(window.sessionStorage.getItem('config')).name;
         $.dom('head > title').content(title);
-        for(var e of ['body > header', '#list', '.it']){
+        $.dom('.name').content(title).attr({'style':"font-size: 3.6em"});
+        $.dom('.subhead').hide()
+        for(var e of ['#list', '.it']){
             //XXX es6 let
             $.dom(e).show();
         };
         for(var e of ['#disqus_thread', "#main"]){
             var d = $.dom(e);
-            if(d)d.del().add($.dom('<div>', {'id':e.slice(1)}).hide());
+            if(d)d.del().add($.dom((e=='#main')?'<article>':'<div>', {'id':e.slice(1)}).hide());
         };
     },
     'mark': function(page, push){
@@ -103,20 +112,16 @@ var load = {
         for(var e of ['#main', '#disqus_thread']){
             $.dom(e).show();
         };
-        for(var e of ['body > header', '#list', '.it']){
+        for(var e of ['#list', '.it']){
             $.dom(e).hide();
         };
         $.http(`./mark/${page}.md`).get().then(function(res){
             $.dom('#main').inner(marked(res.text));
             if(!!$.dom('#main > h1')){
-                $.dom('#main > h1').on('mouseover', function(){
-                    this.style.color = '#2484c1';
-                }).on('mouseout', function(){
-                    this.style.color = null;
-                }).on('click', function(){
-                    window.history.pushState({}, '', '/');
-                    load.home();
-                });
+                $.dom('.name').content($.dom('#main > h1').textContent).attr({'style':"font-size: 1em"});
+                $.dom('.subhead').show().content($.dom('#main > h2').textContent).attr({'style':"font-size: 1em"});
+                $.dom('#main > h1').del();
+                $.dom('#main > h2').del();
             };
             load.disqus();
         }, function(err){

@@ -13,9 +13,6 @@
             #list {
                 font-size: 1.2em;
             }
-            .name {
-                font-size: 3.6em;
-            }
             .it {
                 font-size: 0.5em;
                 float: right;
@@ -23,18 +20,17 @@
         </style>
         <header>
             <h1><strong class='name'>icebox</strong></h1>
+            <h2 class='subhead'></h2>
         </header>
         <main>
             <section>
                 <ul id='list'></ul>
             </section>
-            <article>
-                <div id='main'></div>
-            </article>
-            <aside id="warning">
+            <article id='main'></article>
+            <section id="warning">
                 <noscript>If you can, please turn JavaScript support. :)</noscript>
                 <p>This blog uses some ES6 syntax, outdated browser may not be resolved.<p>
-            </aside>
+            </section>
         </main>
         <footer>
             <div class='it'></div>
@@ -45,7 +41,7 @@
                 }catch(e){
                     var name = window.decodeURIComponent(document.location.search.substring(1));
                     if(!!name){
-                        //
+                        document.getElementById('alink').href += '/blob/master/mark/'+ name +'.md';
                     };
                 };
             </script>
