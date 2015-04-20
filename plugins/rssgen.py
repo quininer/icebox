@@ -28,7 +28,7 @@ class rssgen(object):
             for node in self._channel:
                 if node.tag == 'item':
                     continue
-                self.channel[node.tag] = node.text
+                self.channel[node.tag] = etree.CDATA(node.text)
 
     def generator(self, title, link, description, **channels):
         """
