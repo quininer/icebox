@@ -21,7 +21,7 @@ class rssgen(object):
     def __init__(self, path):
         self.path = path
         if isfile(self.path):
-            self._source = etree.parse(self.path)
+            self._source = etree.parse(self.path, parser=etree.XMLParser(strip_cdata=False))
             self.feed = self._source.getroot()
             self._channel = self.feed.find('channel')
 
