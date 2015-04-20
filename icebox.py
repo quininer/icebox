@@ -32,7 +32,7 @@ class icebox(object):
     def osexec(self, action, rename=''):
         for ext in self.extend:
             system(strcode(self.extend[ext].format(
-                name=self.name, path=self.path, ext=strcode(ext), action=action, rename=rename
+                name=self.name, path=self.path, ext=strcode(ext), action=action, rename=rename, file=self.markfile
             )))
         else: exit('[!] {end}完成!'.format(end=action))
 
