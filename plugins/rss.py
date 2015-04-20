@@ -27,7 +27,7 @@ def generator(feed):
 def add_item(feed, name, file):
     feed.additem(
         name,
-        "{link}/mark.html?{name}".format(
+        "{link}/?{name}".format(
             link=feed.channel['link'],
             name=name
         ),

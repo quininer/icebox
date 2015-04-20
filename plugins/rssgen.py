@@ -28,7 +28,7 @@ class rssgen(object):
             for node in self._channel:
                 if node.tag == 'item':
                     continue
-                self.channel[node.tag] = etree.CDATA(node.text)
+                self.channel[node.tag] = node.text
 
     def generator(self, title, link, description, **channels):
         """
@@ -39,7 +39,7 @@ class rssgen(object):
         """
         channels['title'] = title
         channels['link'] = link
-        channels['description'] = etree.CDATA(description)
+        channels['description'] = description
         channels['pubDate'] = channels['pubDate'] if 'pubDate' in channels  else ctime()
         channels['lastBuildDate'] = channels['lastBuildDate'] if 'lastBuildDate' in channels else ctime()
         channels['generator'] = channels['generator'] if 'generator' in channels else "rssgen {}".format(self.version)
@@ -62,7 +62,7 @@ class rssgen(object):
 
         item = etree.Element('item')
         for node in items:
-            etree.SubElement(item, node).text = etree.CDATA(items[node])
+            etree.SubElement(item, node).text = etree.CDATA(items[node]) if node in ['description'] else items[node]
 
         indexitem = self._channel.find('item')
         if indexitem is None:
@@ -83,6 +83,6 @@ class rssgen(object):
             if self._channel.find(node) is None:
                 self._channel.insert(0, etree.Element(node))
 
-            self._channel.find(node).text = etree.CDATA(self.channel[node])
+            self._channel.find(node).text = etree.CDATA(self.channel[node]) if node in ['description'] else self.channel[node]
 
         self._source.write(self.path, pretty_print=True, xml_declaration=True, encoding='utf-8')
