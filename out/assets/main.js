@@ -13,6 +13,7 @@ var load = {
             Array.prototype.forEach.call($.query('link'), function(e){
                 e.del();
             });
+            $.dom('.name').content(window.decodeURIComponent(config.name));
             config.style.forEach(function(link){
                 $.dom('head').add(
                     $.dom('<link>', {
@@ -30,7 +31,6 @@ var load = {
                     })
                 );
             });
-            $.dom('.name').content(window.decodeURIComponent(config.name));
             config.links.forEach(function(links){
                 $.dom('.it').add($.dom('<p>'));
                 links.forEach(function(link){
@@ -66,11 +66,9 @@ var load = {
                 window.sessionStorage.setItem('config', res.text)
             }, function(err){
                 console.error(err);
-            })
-            .then(this.pages, function(err){
+            }).then(this.pages, function(err){
                 console.error(err);
-            })
-            .catch(function(err){
+            }).catch(function(err){
                 console.error(err);
             });
         }else{

@@ -39,7 +39,7 @@ class rssgen(object):
         """
         channels['title'] = title
         channels['link'] = link
-        channels['description'] = description
+        channels['description'] = etree.CDATA(description)
         channels['pubDate'] = channels['pubDate'] if 'pubDate' in channels  else ctime()
         channels['lastBuildDate'] = channels['lastBuildDate'] if 'lastBuildDate' in channels else ctime()
         channels['generator'] = channels['generator'] if 'generator' in channels else "rssgen {}".format(self.version)
@@ -56,7 +56,7 @@ class rssgen(object):
         """
         items['title'] = title
         items['link'] = link
-        items['description'] = description
+        items['description'] = etree.CDATA(description)
         items['guid'] = guid
         items['pubDate'] = items['pubDate'] if 'pubDate' in items else ctime()
 
