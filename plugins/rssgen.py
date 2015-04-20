@@ -56,13 +56,13 @@ class rssgen(object):
         """
         items['title'] = title
         items['link'] = link
-        items['description'] = etree.CDATA(description)
+        items['description'] = description
         items['guid'] = guid
         items['pubDate'] = items['pubDate'] if 'pubDate' in items else ctime()
 
         item = etree.Element('item')
         for node in items:
-            etree.SubElement(item, node).text = items[node]
+            etree.SubElement(item, node).text = etree.CDATA(items[node])
 
         indexitem = self._channel.find('item')
         if indexitem is None:
@@ -83,6 +83,6 @@ class rssgen(object):
             if self._channel.find(node) is None:
                 self._channel.insert(0, etree.Element(node))
 
-            self._channel.find(node).text = self.channel[node]
+            self._channel.find(node).text = etree.CDATA(self.channel[node])
 
         self._source.write(self.path, pretty_print=True, xml_declaration=True, encoding='utf-8')
