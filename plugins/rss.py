@@ -11,7 +11,7 @@ if version:
 else:
     unicode = None
 from urllib.parse import quote
-from markdwon import markdownFromFile
+from markdown import markdownFromFile
 from rssgen import rssgen
 
 def generator(feed):
