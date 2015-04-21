@@ -38,7 +38,10 @@ def add_item(feed, name, file):
     )
 
 def del_item(feed, guid):
-    feed.delitem(guid)
+    feed.delitem("{link}/?{name}".format(
+            link=feed.channel['link'],
+            name=quote(guid)
+        ))
 
 def rename_item(feed, guid, rename, file=None):
     try:
