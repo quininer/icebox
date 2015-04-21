@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 from lxml import etree
-from time import ctime
+from time import time
+from email.utils import formatdate
 from os.path import isfile
 
 class rssgen(object):
@@ -40,8 +41,8 @@ class rssgen(object):
         channels['title'] = title
         channels['link'] = link
         channels['description'] = description
-        channels['pubDate'] = channels['pubDate'] if 'pubDate' in channels  else ctime()
-        channels['lastBuildDate'] = channels['lastBuildDate'] if 'lastBuildDate' in channels else ctime()
+        channels['pubDate'] = channels['pubDate'] if 'pubDate' in channels  else formatdate(time())
+        channels['lastBuildDate'] = channels['lastBuildDate'] if 'lastBuildDate' in channels else formatdate(time())
         channels['generator'] = channels['generator'] if 'generator' in channels else "rssgen {}".format(self.version)
         self.channel = channels
 
@@ -58,7 +59,7 @@ class rssgen(object):
         items['link'] = link
         items['description'] = description
         items['guid'] = guid
-        items['pubDate'] = items['pubDate'] if 'pubDate' in items else ctime()
+        items['pubDate'] = items['pubDate'] if 'pubDate' in items else formatdate(time())
 
         item = etree.Element('item')
         for node in items:
