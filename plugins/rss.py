@@ -10,7 +10,7 @@ if version:
     input = raw_input
 else:
     unicode = None
-
+from urllib.parse import quote
 from rssgen import rssgen
 
 def generator(feed):
@@ -25,14 +25,15 @@ def generator(feed):
     )
 
 def add_item(feed, name, file):
+    url = "{link}/?{name}".format(
+            link=feed.channel['link'],
+            name=quote(name)
+        )
     feed.additem(
         name,
-        "{link}/?{name}".format(
-            link=feed.channel['link'],
-            name=name
-        ),
+        url,
         open(file, 'r').read() if file else name,
-        name,
+        url,
         author=feed.channel['managingEditor']
     )
 
