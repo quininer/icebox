@@ -11,6 +11,7 @@ if version:
 else:
     unicode = None
 from urllib.parse import quote
+from markdwon import markdownFromFile
 from rssgen import rssgen
 
 def generator(feed):
@@ -24,7 +25,7 @@ def generator(feed):
         copyright       = input('Copyright: ')
     )
 
-def add_item(feed, name, file):
+def add_item(feed, name, file=None):
     url = "{link}/?{name}".format(
             link=feed.channel['link'],
             name=quote(name)
@@ -32,7 +33,7 @@ def add_item(feed, name, file):
     feed.additem(
         name,
         url,
-        open(file, 'r').read() if file else name,
+        markdownFromFile(file) if file else name,
         url,
         author=feed.channel['managingEditor']
     )
