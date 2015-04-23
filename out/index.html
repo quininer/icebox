@@ -7,11 +7,18 @@
         <script src='./assets/ice.js'></script>
         <script src='./assets/marked/marked.min.js'></script>
         <script src='./assets/main.js' async></script>
+        <link rel="alternate" type="application/rss+xml" title="icebox" href="https://quininer.github.io/rss.xml" />
     </head>
     <body>
         <style scoped>
             #list {
                 font-size: 1.2em;
+            }
+            .title {
+                font-size: 3.6em;
+            }
+            .name .subhead {
+                font-size: 1em;
             }
             .it {
                 font-size: 0.5em;
@@ -19,7 +26,8 @@
             }
         </style>
         <header>
-            <h1><strong class='name'>icebox</strong></h1>
+            <h1><strong class='title'>icebox</strong></h1>
+            <h1><strong class='name' hidden>icebox</strong></h1>
             <h2 class='subhead'></h2>
         </header>
         <main>

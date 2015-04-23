@@ -94,11 +94,13 @@ var load = {
     'home': function(){
         var title = JSON.parse(window.sessionStorage.getItem('config')).name;
         $.dom('head > title').content(title);
-        $.dom('.name').show().content(title).attr({'style':"font-size: 3.6em"});
-        $.dom('.subhead').hide()
-        for(var e of ['#list', '.it']){
+        $.dom('.title').content(title);
+        for(var e of ['#list', '.it', '.title']){
             //XXX es6 let
             $.dom(e).show();
+        };
+        for(var e of ['.name', '.subhead']){
+            $.dom(e).hide();
         };
         for(var e of ['#disqus_thread', "#main"]){
             var d = $.dom(e);
@@ -109,21 +111,22 @@ var load = {
         //XXX  es6 Default
         $.dom('head > title').content(page);
         if(push===undefined||!!push)window.history.pushState({}, '', `?${page}`);
-        for(var e of ['#main', '#disqus_thread']){
+        for(var e of ['#main', '#disqus_thread', '.name', '.subhead']){
             $.dom(e).show();
         };
-        for(var e of ['#list', '.it']){
+        for(var e of ['#list', '.it', '.title']){
             $.dom(e).hide();
         };
         $.http(`./mark/${page}.md`).get().then(function(res){
             $.dom('#main').inner(marked(res.text));
             if(!!($.dom('#main > h1')&&$.dom('#main > h2'))){
-                $.dom('.name').content($.dom('#main > h1').textContent).attr({'style':"font-size: 1em"});
-                $.dom('.subhead').show().content($.dom('#main > h2').textContent).attr({'style':"font-size: 1em"});
+                $.dom('.name').content($.dom('#main > h1').textContent);
+                $.dom('.subhead').content($.dom('#main > h2').textContent);
                 $.dom('#main > h1').del();
                 $.dom('#main > h2').del();
             }else{
                 $.dom('.name').hide();
+                $.dom('.subhead').hide();
             };
             load.disqus();
         }, function(err){
