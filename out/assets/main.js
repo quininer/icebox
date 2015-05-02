@@ -47,7 +47,15 @@ var load = {
                 });
             });
             $.http('./blog.json').get().then(function(res){
-                res.json().reverse().forEach(function(page){
+                if(res.ok){
+                    return res.json();
+                }else{
+                    console.error(`${res.statusText} ${res.status}: ${res.url}`);
+                };
+            }, function(err){
+                console.error(err);
+            }).then(function(json){
+                json.reverse().forEach(function(page){
                     $.dom('#list').add(
                         $.dom('<li>').add(
                             $.dom('<a>', {
@@ -57,8 +65,6 @@ var load = {
                         )
                     );
                 });
-            }, function(err){
-                console.error(err);
             }).catch(function(err){
                 console.error(err);
             });
@@ -68,14 +74,18 @@ var load = {
                 load.home();
             };
         };
+
         if(!window.sessionStorage.getItem('config')){
             $.http('./config.json').get().then(function(res){
-                window.sessionStorage.setItem('config', res.text)
+                if(res.ok){
+                    return res.text();
+                }else{
+                    console.error(`${res.statusText} ${res.status}: ${res.url}`);
+                };
             }, function(err){
-                console.error(err);
-            }).then(this.pages, function(err){
-                console.error(err);
-            }).catch(function(err){
+            }).then(function(text){
+                window.sessionStorage.setItem('config', text);
+            }).then(this.pages).catch(function(err){
                 console.error(err);
             });
         }else{
@@ -118,7 +128,13 @@ var load = {
             $.dom(e).hide();
         };
         $.http(`./mark/${page}.md`).get().then(function(res){
-            $.dom('#main').inner(marked(res.text));
+                if(res.ok){
+                    return res.text();
+                }else{
+                    console.error(`${res.statusText} ${res.status}: ${res.url}`);
+                };
+        }).then(function(text){
+            $.dom('#main').inner(marked(text));
             if(!!($.dom('#main > h1')&&$.dom('#main > h2'))){
                 $.dom('.name').content($.dom('#main > h1').textContent);
                 $.dom('.subhead').content($.dom('#main > h2').textContent);

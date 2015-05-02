@@ -70,63 +70,29 @@ $ = {
                 };
                 return mp;
             },
-            ajax: function(method, args){
-                /*
-                 *  ajax
-                 *      url, query, body, headers, realbody, async
-                 * */
-                return new Promise(function(resolve, reject){
-                    //XXX use fatch API
-                    var xhr = new XMLHttpRequest();
-
-                    if(args.query != undefined)args.query = $.http().urlen(args.query);
-                    if((args.body != undefined)&&!args.realbody)args.body = $.http().urlen(args.body);
-                    if(!~args.url.indexOf('?')&&!!args.query){
-                        args.url = `${args.url}?${args.query}`;
-                    };
-                    xhr.open(method, args.url, (args.async===undefined||!!args.async));
-                    if((args.headers != undefined)){
-                        for(var header in args.headers){
-                            xhr.setRequestHeader(header, args.headers[header]);
-                        }
-                    };
-                    xhr.onreadystatechange = function(){
-                        if(this.readyState == 4){
-                            if(this.status===200||this.status===0){// 0 when files are loaded locally (e.g., cordova/phonegap app.)
-                                this.text = this.responseText;
-                                this.json = function(){
-                                    //XXX Arrow function
-                                    return JSON.parse(this.text);
-                                };
-                                resolve(this);
-                            }else{
-                                this.text = this.responseText;
-                                this.json = function(){
-                                    //XXX Arrow function
-                                    return JSON.parse(this.text);
-                                };
-                                reject({
-                                    'error':this.statusText,
-                                    'xhr':this
-                                });
-                            };
-                        };
-                    };
-                    xhr.send(args.body);
-                });
+            fetch: function(method, args){
+                if(!method)method = 'GET';
+                if(!args)args = {};
+                if(!('method' in args))args['method'] = method;
+                if(args.query != undefined)args.query = $.http().urlen(args.query);
+                if((args.body != undefined)&&!args.realbody)args.body = $.http().urlen(args.body);
+                if(!~args.url.indexOf('?')&&!!args.query){
+                    args.url = `${args.url}?${args.query}`;
+                };
+                return fetch(url, args);
             },
             get: function(args){
                 if(!args)args = {};
                 //XXX use es6 Default parameters
                 if(!args.url)args.url = url;
-                return this.ajax('GET', args);
+                return this.fetch('GET', args);
             },
             post: function(args){
                 if(!args)args = {};
                 if(!args.url)args.url = url;
                 if(!args.headers)args.headers = {};
                 if(!args.headers['Content-type'])args.headers['Content-type'] = "application/x-www-form-urlencoded";
-                return this.ajax('POST', args);
+                return this.fetch('POST', args);
             }
         };
     },
