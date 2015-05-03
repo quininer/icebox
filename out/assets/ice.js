@@ -76,7 +76,7 @@ $ = {
                 if(!('method' in args))args['method'] = method;
                 if(args.query != undefined)args.query = $.http().urlen(args.query);
                 if((args.body != undefined)&&!args.realbody)args.body = $.http().urlen(args.body);
-                if(!!args.url)args.url = url;
+                if(!args.url)args.url = url;
                 if(!~args.url.indexOf('?')&&!!args.query){
                     args.url = `${args.url}?${args.query}`;
                 };
