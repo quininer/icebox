@@ -76,20 +76,19 @@ $ = {
                 if(!('method' in args))args['method'] = method;
                 if(args.query != undefined)args.query = $.http().urlen(args.query);
                 if((args.body != undefined)&&!args.realbody)args.body = $.http().urlen(args.body);
+                if(!!args.url)args.url = url;
                 if(!~args.url.indexOf('?')&&!!args.query){
                     args.url = `${args.url}?${args.query}`;
                 };
-                return fetch(url, args);
+                return fetch(args.url, args);
             },
             get: function(args){
                 if(!args)args = {};
                 //XXX use es6 Default parameters
-                if(!args.url)args.url = url;
                 return this.fetch('GET', args);
             },
             post: function(args){
                 if(!args)args = {};
-                if(!args.url)args.url = url;
                 if(!args.headers)args.headers = {};
                 if(!args.headers['Content-type'])args.headers['Content-type'] = "application/x-www-form-urlencoded";
                 return this.fetch('POST', args);
