@@ -1,9 +1,11 @@
 $ = {
     init: function(d, w){
         w.HTMLElement.prototype.on = function(name, foo){
-            (this.addEventListener)?(
-                this.addEventListener(name, foo, false)):(
-                    this.attachEvent(`on${name}`, foo));
+            if(this.addEventListener){
+                this.addEventListener(name, foo, false);
+            }else{
+                this.attachEvent(`on${name}`, foo);
+            };
             return this;
         };
         w.HTMLElement.prototype.add = function(){
@@ -54,7 +56,8 @@ $ = {
                     vp[k] = mp[k];
                 };
                 for(var q in vp){
-                    uri += `${window.encodeURIComponent(q)}=${window.encodeURIComponent(escape(vp[q]))}&`;
+                    if(!q)continue;
+                    uri += (!!vp[q])?`${window.encodeURIComponent(q)}=${window.encodeURIComponent(escape(vp[q]))}&`:`${window.encodeURIComponent(q)}&`;
                 };
                 u.search = `?${uri.slice(0, -1)}`;
                 if(!!h)u.hash = h;
@@ -83,14 +86,9 @@ $ = {
                 return fetch(args.url, args);
             },
             get: function(args){
-                if(!args)args = {};
-                //XXX use es6 Default parameters
                 return this.fetch('GET', args);
             },
             post: function(args){
-                if(!args)args = {};
-                if(!args.headers)args.headers = {};
-                if(!args.headers['Content-type'])args.headers['Content-type'] = "application/x-www-form-urlencoded";
                 return this.fetch('POST', args);
             }
         };
