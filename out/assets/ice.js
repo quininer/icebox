@@ -10,7 +10,7 @@ $ = {
             for(var e of Array.prototype.slice.call(arguments))this.appendChild(e);
             return this;
         };
-        w.HTMLElement.prototype.app = function(html, p){
+        w.HTMLElement.prototype.append = function(html, p){
             //XXX use es6 Default parameters
             if(!p)p = 'afterend';
             this.insertAdjacentHTML(p, html);

@@ -43,7 +43,7 @@ var load = {
                 links.forEach(function(link){
                     $.dom('.it p:last-child').add(
                         $.dom('<a>', link).content(link.name).on('click', load._link)
-                    ).app(' - ', 'beforeend');
+                    ).append(' - ', 'beforeend');
                 });
             });
             $.http('./blog.json').get().then(function(res){
@@ -83,6 +83,7 @@ var load = {
                     console.error(`${res.statusText} ${res.status}: ${res.url}`);
                 };
             }, function(err){
+                console.error(err);
             }).then(function(text){
                 window.sessionStorage.setItem('config', text);
             }).then(this.pages).catch(function(err){
@@ -127,6 +128,8 @@ var load = {
         for(var e of ['#list', '.it', '.title']){
             $.dom(e).hide();
         };
+        $.dom('.name').content('LOADING...');
+        $.dom('.subhead').content('just a moment. :)');
         $.http(`./mark/${page}.md`).get().then(function(res){
                 if(res.ok){
                     return res.text();
@@ -147,6 +150,8 @@ var load = {
             load.disqus();
         }, function(err){
             console.error(err);
+            $.dom('.name').hide();
+            $.dom('.subhead').hide();
             $.dom('#main').inner(marked("# ( ・_・)"));
         }).catch(function(err){
             console.error(err);
