@@ -14,8 +14,7 @@ $ = {
         };
         w.HTMLElement.prototype.append = function(html, p){
             //XXX use es6 Default parameters
-            if(!p)p = 'afterend';
-            this.insertAdjacentHTML(p, html);
+            this.insertAdjacentHTML(p||'afterend', html);
             return this;
         };
         w.HTMLElement.prototype.del = function(e){
