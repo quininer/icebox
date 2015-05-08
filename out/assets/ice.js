@@ -14,7 +14,7 @@ $ = {
         };
         w.HTMLElement.prototype.append = function(html, p){
             //XXX use es6 Default parameters
-            this.insertAdjacentHTML(p||'afterend', html);
+            this.insertAdjacentHTML(p||'beforeend', html);
             return this;
         };
         w.HTMLElement.prototype.del = function(e){
@@ -35,10 +35,6 @@ $ = {
             if(this.hidden)this.hidden = false;
             return this;
         };
-        w.HTMLElement.prototype.inner = function(html){
-            this.innerHTML = html;
-            return this;
-        };
         w.HTMLElement.prototype.content = function(text){
             if(!!text)this.textContent = text;
             return this;
@@ -49,7 +45,7 @@ $ = {
         return {
             urlen: function(mp, h){
                 var uri = '';
-                var u = $.dom('<a>', {"href":url||document.location.origin});
+                var u = $.dom('<a>').attr({"href":url||document.location.origin});
                 var vp = $.http(u.href).urlde();
                 for(var k in mp){
                     vp[k] = mp[k];
@@ -64,7 +60,7 @@ $ = {
             },
             urlde: function(s){
                 var mp = {};
-                for(var kv of (s||$.dom('<a>', {"href":url||document.location.href}).search.slice(1)).split('&')){
+                for(var kv of (s||$.dom('<a>').attr({"href":url||document.location.href}).search.slice(1)).split('&')){
                     // let and [] = []
                     var k = kv.split('=')[0],
                         v = kv.split('=')[1];
@@ -72,31 +68,35 @@ $ = {
                 };
                 return mp;
             },
-            fetch: function(method, args){
-                if(!method)method = 'GET';
+            fetch: function(args){
                 if(!args)args = {};
-                if(!('method' in args))args['method'] = method;
-                if(args.query != undefined)args.query = $.http().urlen(args.query);
                 if((args.body != undefined)&&!args.realbody)args.body = $.http().urlen(args.body);
-                if(!args.url)args.url = url;
-                if(!~args.url.indexOf('?')&&!!args.query){
-                    args.url = `${args.url}?${args.query}`;
-                };
-                return fetch(args.url, args);
+                if(!!args.query)url = $.http(url).urlen(args.query);
+                return fetch(url, args);
             },
             get: function(args){
-                return this.fetch('GET', args);
+                if(!args)args = {};
+                args['method'] = 'GET';
+                return this.fetch(args);
             },
             post: function(args){
-                return this.fetch('POST', args);
+                if(!args)args = {};
+                if(!args.headers)args['headers'] = {};
+                if(!(args.headers['Content-Type']||args.headers['content-type']||args.realbody))args.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                args['method'] = 'POST';
+                return this.fetch(args);
             }
         };
     },
-    dom: function(setr, attr){
-        //XXX use es6 Arrow function
-        return (~setr.indexOf('<')&&setr.slice(-1)=='>')?document.createElement(setr.slice(1, -1)).attr(attr):document.querySelector(setr);
+    dom: function(){
+        var doms = [];
+        for(var a of Array.prototype.slice.call(arguments)){
+            doms.push((~a.indexOf('<')&&a.slice(-1)=='>')?document.createElement(a.slice(1, -1)):document.querySelector(a));
+        };
+        return (arguments.length>1)?doms:doms.pop();
     },
     query: function(selector){
+        //XXX use es6 Arrow function
         return document.querySelectorAll(selector);
     }
 };

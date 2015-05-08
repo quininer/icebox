@@ -1,96 +1,96 @@
 var load = {
-    '_link':function(e){
+    '_link': function(e){
         if(this.attributes['data-href']){
             e.preventDefault();
             load.mark(this.attributes['data-href'].value);
         };
     },
 
-    'init': function(){
+    '_page': function(){
         var page = window.decodeURIComponent(document.location.search.slice(1));
-        this.pages = function(){
-            var config = JSON.parse(window.sessionStorage.getItem('config'));
-            Array.prototype.forEach.call($.query('link'), function(e){
-                e.del();
+        var config = JSON.parse(window.sessionStorage.getItem('config'));
+        Array.prototype.forEach.call($.query('link'), function(e){
+            e.del();
+        });
+        $.dom('.name').on('mouseover', function(){
+            this.style.color = '#2484c1';
+        }).on('mouseout', function(){
+            this.style.color = null;
+        }).on('click', function(){
+            window.history.pushState({}, '', '/');
+            load.home();
+        });
+        config.style.forEach(function(link){
+            $.dom('head').add(
+                $.dom('<link>').attr({
+                    "rel":"stylesheet",
+                    "type":"text/css",
+                    "href":link
+                })
+            );
+        });
+        config.script.forEach(function(link){
+            $.dom('head').add(
+                $.dom('<script>').attr({
+                    "type":"text/javascript",
+                    "src":link
+                })
+            );
+        });
+        config.links.forEach(function(links){
+            $.dom('.it').add($.dom('<p>'));
+            links.forEach(function(link){
+                $.dom('.it p:last-child').add(
+                    $.dom('<a>').attr(link).content(link.name).on('click', load._link)
+                ).append(' - ', 'beforeend');
             });
-            $.dom('.name').on('mouseover', function(){
-                this.style.color = '#2484c1';
-            }).on('mouseout', function(){
-                this.style.color = null;
-            }).on('click', function(){
-                window.history.pushState({}, '', '/');
-                load.home();
-            });
-            config.style.forEach(function(link){
-                $.dom('head').add(
-                    $.dom('<link>', {
-                        "rel":"stylesheet",
-                        "type":"text/css",
-                        "href":link
-                    })
-                );
-            });
-            config.script.forEach(function(link){
-                $.dom('head').add(
-                    $.dom('<script>', {
-                        "type":"text/javascript",
-                        "src":link
-                    })
-                );
-            });
-            config.links.forEach(function(links){
-                $.dom('.it').add($.dom('<p>'));
-                links.forEach(function(link){
-                    $.dom('.it p:last-child').add(
-                        $.dom('<a>', link).content(link.name).on('click', load._link)
-                    ).append(' - ', 'beforeend');
-                });
-            });
-            $.http('./blog.json').get().then(function(res){
-                if(res.ok){
-                    return res.json();
-                }else{
-                    console.error(`${res.statusText} ${res.status}: ${res.url}`);
-                };
-            }, function(err){
-                console.error(err);
-            }).then(function(json){
-                json.reverse().forEach(function(page){
-                    $.dom('#list').add(
-                        $.dom('<li>').add(
-                            $.dom('<a>', {
-                                'data-href':page,
-                                'href':`?${page}`
-                            }).content(page).on('click', load._link)
-                        )
-                    );
-                });
-            }).catch(function(err){
-                console.error(err);
-            });
-            if(page){
-                load.mark(page, false);
+        });
+        $.http('./blog.json').get().then(function(res){
+            if(res.ok){
+                return res.json();
             }else{
-                load.home();
+                throw(`${res.statusText} ${res.status}: ${res.url}`);
             };
+        }, function(err){
+            console.error(err);
+        }).then(function(json){
+            json.reverse().forEach(function(page){
+                $.dom('#list').add(
+                    $.dom('<li>').add(
+                        $.dom('<a>').attr({
+                            'data-href':page,
+                            'href':`?${page}`
+                        }).content(page).on('click', load._link)
+                    )
+                );
+            });
+        }).catch(function(err){
+            console.error(err);
+        });
+        if(page){
+            load.mark(page, false);
+        }else{
+            load.home();
         };
+    },
 
+    'init': function(){
         if(!window.sessionStorage.getItem('config')){
             $.http('./config.json').get().then(function(res){
                 if(res.ok){
                     return res.text();
                 }else{
-                    console.error(`${res.statusText} ${res.status}: ${res.url}`);
+                    throw(`${res.statusText} ${res.status}: ${res.url}`);
                 };
             }, function(err){
                 console.error(err);
             }).then(function(text){
                 window.sessionStorage.setItem('config', text);
-            }).then(this.pages).catch(function(err){
+            }).then(load._page).catch(function(err){
                 console.error(err);
             });
         }else{
-            this.pages();
+            load._page();
         };
 
         window.onpopstate = function(event){
@@ -104,55 +104,55 @@ var load = {
     },
     'home': function(){
         var title = JSON.parse(window.sessionStorage.getItem('config')).name;
-        $.dom('head > title').content(title);
-        $.dom('.title').content(title);
-        for(var e of ['#list', '.it', '.title']){
-            //XXX es6 let
-            $.dom(e).show();
-        };
-        for(var e of ['.name', '.subhead']){
-            $.dom(e).hide();
-        };
-        for(var e of ['#disqus_thread', "#main"]){
-            var d = $.dom(e);
-            if(d)d.del().add($.dom((e=='#main')?'<article>':'<div>', {'id':e.slice(1)}).hide());
-        };
+        $.dom('head > title', '.title').forEach(function(e){
+            e.content(title);
+        });
+        $.dom('#list', '.it', '.title').forEach(function(e){
+            e.show();
+        });
+        $.dom('.name', '.subhead').forEach(function(e){
+            e.hide();
+        });
+        $.dom('#disqus_thread', "#main").forEach(function(e){
+            if(e)e.del().add($.dom(`<${e.tagName}>`).attr({'id':e.id}).hide());
+        });
     },
     'mark': function(page, push){
         //XXX  es6 Default
         $.dom('head > title').content(page);
         if(push===undefined||!!push)window.history.pushState({}, '', `?${page}`);
-        for(var e of ['#main', '#disqus_thread', '.name', '.subhead']){
-            $.dom(e).show();
-        };
-        for(var e of ['#list', '.it', '.title']){
-            $.dom(e).hide();
-        };
+        $.dom('#main', '#disqus_thread', '.name', '.subhead').forEach(function(e){
+            e.show();
+        });
+        $.dom('#list', '.it', '.title').forEach(function(e){
+            e.hide();
+        });
         $.dom('.name').content('LOADING...');
         $.dom('.subhead').content('just a moment. :)');
         $.http(`./mark/${page}.md`).get().then(function(res){
-                if(res.ok){
-                    return res.text();
-                }else{
-                    console.error(`${res.statusText} ${res.status}: ${res.url}`);
-                };
+            if(res.ok){
+                return res.text();
+            }else{
+                throw(`${res.statusText} ${res.status}: ${res.url}`);
+            };
         }).then(function(text){
-            $.dom('#main').inner(marked(text));
+            $.dom('#main').append(marked(text));
             if(!!($.dom('#main > h1')&&$.dom('#main > h2'))){
                 $.dom('.name').content($.dom('#main > h1').textContent);
                 $.dom('.subhead').content($.dom('#main > h2').textContent);
-                $.dom('#main > h1').del();
-                $.dom('#main > h2').del();
+                $.dom('#main > h1', '#main > h2').forEach(function(e){
+                    e.del();
+                });
             }else{
-                $.dom('.name').hide();
-                $.dom('.subhead').hide();
+                $.dom('.name', '.subhead').forEach(function(e){
+                    e.hide();
+                });
             };
             load.disqus();
         }, function(err){
             console.error(err);
-            $.dom('.name').hide();
+            $.dom('.name').content('( ・_・)');
             $.dom('.subhead').hide();
-            $.dom('#main').inner(marked("# ( ・_・)"));
         }).catch(function(err){
             console.error(err);
         });
