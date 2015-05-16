@@ -110,17 +110,17 @@ var load = {
         $.dom('#list', '.it', '.title').forEach(function(e){
             e.show();
         });
-        $.dom('.name', '.subhead').forEach(function(e){
+        $.dom('.name', '.subhead', '#disqus_thread', '#main').forEach(function(e){
             e.hide();
-        });
-        $.dom('#disqus_thread', "#main").forEach(function(e){
-            if(e)e.del().add($.dom(`<${e.tagName}>`).attr({'id':e.id}).hide());
         });
     },
     'mark': function(page, push){
         //XXX  es6 Default
         $.dom('head > title').content(page);
         if(push===undefined||!!push)window.history.pushState({}, '', `?${page}`);
+        $.dom('#disqus_thread', '#main').forEach(function(e){
+            if(e)e.del().add($.dom(`<${e.tagName}>`).attr({'id':e.id}));
+        });
         $.dom('#main', '#disqus_thread', '.name', '.subhead').forEach(function(e){
             e.show();
         });
