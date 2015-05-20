@@ -1,4 +1,6 @@
-$ = {
+"use strict";
+
+var $ = {
     init: function(d, w){
         w.HTMLElement.prototype.on = function(name, foo){
             if(this.addEventListener){

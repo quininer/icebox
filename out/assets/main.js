@@ -1,3 +1,5 @@
+"use strict";
+
 var load = {
     '_link': function(e){
         if(this.attributes['data-href']){

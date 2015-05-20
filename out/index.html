@@ -43,12 +43,13 @@
             <div class='it'></div>
             <div id="disqus_thread"></div>
             <script>
+                "use strict";
                 try{
                     $.dom('#warning').del();
                 }catch(e){
                     var name = window.decodeURIComponent(document.location.search.substring(1));
                     if(!!name){
-                        document.getElementById('alink').href += '/blob/master/mark/'+ name +'.md';
+                        //document.getElementById('alink').href += '/blob/master/mark/'+ name +'.md';
                     };
                 };
             </script>
