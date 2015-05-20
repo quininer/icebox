@@ -52,7 +52,7 @@ $ = {
                 };
                 for(var q in vp){
                     if(!q)continue;
-                    uri += (!!vp[q])?`${window.encodeURIComponent(q)}=${window.encodeURIComponent(escape(vp[q]))}&`:`${window.encodeURIComponent(q)}&`;
+                    uri += (!!vp[q])?`${window.encodeURIComponent(q)}=${window.encodeURIComponent(vp[q])}&`:`${window.encodeURIComponent(q)}&`;
                 };
                 u.search = `?${uri.slice(0, -1)}`;
                 if(!!h)u.hash = h;
