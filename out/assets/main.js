@@ -9,8 +9,8 @@ var load = {
     },
 
     '_page': function(){
-        var page = window.decodeURIComponent(document.location.search.slice(1));
-        var config = JSON.parse(window.sessionStorage.getItem('config'));
+        const page = window.decodeURIComponent(document.location.search.slice(1));
+        const config = JSON.parse(window.sessionStorage.getItem('config'));
         Array.prototype.forEach.call($.query('link'), function(e){
             e.del();
         });
@@ -96,7 +96,7 @@ var load = {
         };
 
         window.onpopstate = function(event){
-            var page = window.decodeURIComponent(document.location.search.slice(1));
+            const page = window.decodeURIComponent(document.location.search.slice(1));
             if(page){
                 load.mark(page, false);
             }else{
@@ -105,7 +105,7 @@ var load = {
         };
     },
     'home': function(){
-        var title = JSON.parse(window.sessionStorage.getItem('config')).name;
+        const title = JSON.parse(window.sessionStorage.getItem('config')).name;
         $.dom('head > title', '.title').forEach(function(e){
             e.content(title);
         });
@@ -160,7 +160,7 @@ var load = {
         });
     },
     'disqus': function(){
-        var disqus_shortname = JSON.parse(window.sessionStorage.getItem('config')).disqus;
+        const disqus_shortname = JSON.parse(window.sessionStorage.getItem('config')).disqus;
         (function() {{
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
             dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';

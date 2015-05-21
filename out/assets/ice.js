@@ -11,7 +11,7 @@ var $ = {
             return this;
         };
         w.HTMLElement.prototype.add = function(){
-            for(var e of Array.prototype.slice.call(arguments))this.appendChild(e);
+            for(let e of Array.prototype.slice.call(arguments))this.appendChild(e);
             return this;
         };
         w.HTMLElement.prototype.append = function(html, p){
@@ -26,7 +26,7 @@ var $ = {
             return p;
         };
         w.HTMLElement.prototype.attr = function(attr){
-            for(var a in attr)this.setAttribute(a, attr[a]);
+            for(let a in attr)this.setAttribute(a, attr[a]);
             return this;
         };
         w.HTMLElement.prototype.hide = function(){
@@ -49,10 +49,10 @@ var $ = {
                 var uri = '';
                 var u = $.dom('<a>').attr({"href":url||document.location.origin});
                 var vp = $.http(u.href).urlde();
-                for(var k in mp){
+                for(let k in mp){
                     vp[k] = mp[k];
                 };
-                for(var q in vp){
+                for(let q in vp){
                     if(!q)continue;
                     uri += (!!vp[q])?`${window.encodeURIComponent(q)}=${window.encodeURIComponent(vp[q])}&`:`${window.encodeURIComponent(q)}&`;
                 };
@@ -62,8 +62,8 @@ var $ = {
             },
             urlde: function(s){
                 var mp = {};
-                for(var kv of (s||$.dom('<a>').attr({"href":url||document.location.href}).search.slice(1)).split('&')){
-                    // let and [] = []
+                for(let kv of (s||$.dom('<a>').attr({"href":url||document.location.href}).search.slice(1)).split('&')){
+                    // [] = []
                     var k = kv.split('=')[0],
                         v = kv.split('=')[1];
                     mp[k] = v||"";
@@ -92,7 +92,7 @@ var $ = {
     },
     dom: function(){
         var doms = [];
-        for(var a of Array.prototype.slice.call(arguments)){
+        for(let a of Array.prototype.slice.call(arguments)){
             doms.push((~a.indexOf('<')&&a.slice(-1)=='>')?document.createElement(a.slice(1, -1)):document.querySelector(a));
         };
         return (arguments.length>1)?doms:doms.pop();
