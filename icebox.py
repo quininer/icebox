@@ -11,7 +11,7 @@ from os import listdir, system, remove, rename
 from subprocess import Popen as popen
 from optparse import OptionParser
 from json import loads, dumps
-from hashlib import md5
+from hashlib import sha512 as xhash
 from time import ctime
 
 setting = loads(open((spath[0] or '.')+'/setting.json').read())
@@ -43,7 +43,7 @@ class icebox(object):
         open(self.blogfile, 'w').write(dumps(item))
 
     def edit(self):
-        checkhash = (lambda x: md5(open(x, 'rb').read()).hexdigest())
+        checkhash = (lambda x: xhash(open(x, 'rb').read()).hexdigest())
         MD5 = checkhash(self.markfile)
 
         command = (self.editor, self.markfile)

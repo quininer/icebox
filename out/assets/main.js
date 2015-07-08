@@ -9,8 +9,8 @@ var load = {
     },
 
     '_page': function(){
-        const page = window.decodeURIComponent(document.location.search.slice(1));
-        const config = JSON.parse(window.sessionStorage.getItem('config'));
+        var page = window.decodeURIComponent(document.location.search.slice(1));
+        var config = JSON.parse(window.sessionStorage.getItem('config'));
         Array.prototype.forEach.call($.query('link'), function(e){
             e.del();
         });
@@ -44,7 +44,7 @@ var load = {
             links.forEach(function(link){
                 $.dom('.it p:last-child').add(
                     $.dom('<a>').attr(link).content(link.name).on('click', load._link)
-                ).append(' - ', 'beforeend');
+                ).append(' - ');
             });
         });
         $.http('./blog.json').get().then(function(res){
@@ -87,7 +87,9 @@ var load = {
             }, function(err){
                 console.error(err);
             }).then(function(text){
-                window.sessionStorage.setItem('config', text);
+                text && window.sessionStorage.setItem('config', text);
+            }, function(err){
+                console.error(err);
             }).then(load._page).catch(function(err){
                 console.error(err);
             });
@@ -96,7 +98,7 @@ var load = {
         };
 
         window.onpopstate = function(event){
-            const page = window.decodeURIComponent(document.location.search.slice(1));
+            var page = window.decodeURIComponent(document.location.search.slice(1));
             if(page){
                 load.mark(page, false);
             }else{
@@ -105,7 +107,7 @@ var load = {
         };
     },
     'home': function(){
-        const title = JSON.parse(window.sessionStorage.getItem('config')).name;
+        var title = JSON.parse(window.sessionStorage.getItem('config')).name;
         $.dom('head > title', '.title').forEach(function(e){
             e.content(title);
         });
@@ -129,8 +131,8 @@ var load = {
         $.dom('#list', '.it', '.title').forEach(function(e){
             e.hide();
         });
-        $.dom('.name').content('LOADING...');
-        $.dom('.subhead').content('just a moment. :)');
+        $.dom('.name').content('just a moment.');
+        $.dom('.subhead').content('loading...');
         $.http(`./mark/${page}.md`).get().then(function(res){
             if(res.ok){
                 return res.text();
@@ -160,7 +162,7 @@ var load = {
         });
     },
     'disqus': function(){
-        const disqus_shortname = JSON.parse(window.sessionStorage.getItem('config')).disqus;
+        var disqus_shortname = JSON.parse(window.sessionStorage.getItem('config')).disqus;
         (function() {{
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
             dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
