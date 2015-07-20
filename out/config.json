@@ -4,6 +4,8 @@
     "style":["/assets/foghorn.css"],
     "script":[],
     "links":[
-        [{"name":"Share it? Attribution-NonCommercial-ShareAlike","href":"https://creativecommons.org/licenses/by-nc-sa/3.0/"}]
+        [
+			{"name":"Share it? Attribution-NonCommercial-ShareAlike", "href":"https://creativecommons.org/licenses/by-nc-sa/3.0/"}
+		]
     ]
 }

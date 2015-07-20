@@ -2,9 +2,8 @@
 <html>
     <head>
         <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-        <script>if(document.location.protocol == 'http:')document.location.protocol = 'https';</script>
+        <script>//if(document.location.protocol == 'http:')document.location.protocol = 'https';</script>
         <title>icebox</title>
-        <script src='./assets/fetch.js'>Compatible Firefox 39 under</script>
         <script src='./assets/ice.js'></script>
         <script src='./assets/marked/marked.min.js'></script>
         <script src='./assets/main.js' async></script>
@@ -38,6 +37,7 @@
             <section id="warning">
                 <noscript>If you can, please turn JavaScript support. :)</noscript>
                 <p>This blog uses some ES6 syntax, outdated browser may not be resolved.<p>
+				<p>You can access the <a id='alink'>URL</a> to get the same content.<p>
             </section>
         </main>
         <footer>
@@ -48,9 +48,11 @@
                 try{
                     $.dom('#warning').del();
                 }catch(e){
-                    let name = window.decodeURIComponent(document.location.search.substring(1));
-                    if(!!name){
-                        //document.getElementById('alink').href += '/blob/master/mark/'+ name +'.md';
+                    var name = window.decodeURIComponent(document.location.search.substring(1));
+					if(!name){
+						document.getElementById('alink').href = '<you repo>';
+					}else{
+                        document.getElementById('alink').href = '/mark/'+ name +'.md';
                     };
                 };
             </script>
